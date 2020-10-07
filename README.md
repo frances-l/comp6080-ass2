@@ -11,7 +11,8 @@
 
 ## 0. Change Log
 
-Not yet
+* 08-10: Clarity given in plagiarism section for students who have done COMP2014 in 2018.
+* 08-10: Added section "4.5. Static HTML, innerHTML, DOM manipulation"
 
 ## 1. Background & Motivation
 
@@ -197,6 +198,13 @@ You should ensure that your programs have been tested on one of the following tw
  * The specification is intentionally vague to allow you to build frontend components however you think are visually appropriate. Their size, positioning, colour, layout, is in virtually all cases completely up to you. We require some basic criteria, but it's mainly dictating elements and behaviour.
  * This is not a design assignment. You are expected to show common sense and critical thinking when it comes to basic user experience and visual layout, but you are not required to be creative to achieve full marks.
 
+### 4.5. Static HTML, innerHTML, DOM manipulation
+
+In this assignment, you are:
+ * Allowed to add static HTML/CSS to the stub website provided (i.e. you can put raw HTML/CSS as if its a static page, even if you then later manipulate it with Javascript).
+ * Allowed to build HTML elements and add CSS properties to the DOM via javascript. We expect this to be the most common way students build these pages
+ * Are **not** allowed to use the `innerHTML` property of nodes/tags to set the inner HTML of an element. This has security vulnerabilities and is in general not best practice. Either statically add the HTML/CSS and manipulate it with javascript, or generate and build nodes/elements in Javascript (just like lectures/tutes/labs), or both. But don't set inner HTML.
+
 ## 5. Marking Criteria
 
 Your assignment will be hand-marked by tutor(s) in the course according to the criteria below.
@@ -273,6 +281,12 @@ submit is your own work (as described above).
 
 Note you will not be penalized if your work has the potential to be taken without your consent or
 knowledge.
+
+**For students who completed COMP2041 in 2018**, this assignment is very similar to another you would 
+have completed. Please remember that UNSW plagiarism guidelines prevent you from using your previous work
+in other courses. This means you must complete this assignment without using/copying any code from
+other assignments. Generally though, this should be OK, as since it's been quite a while since COMP2041
+I am sure many students will not want to reuse their approaches from less-knowledgable selves.
 
 ## 7. Submission
 
