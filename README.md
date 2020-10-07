@@ -11,7 +11,9 @@
 
 ## 0. Change Log
 
-Not yet
+* 08-10: Clarity given in plagiarism section for students who have done COMP2014 in 2018.
+* 08-10: Added section "4.5. Static HTML, innerHTML, DOM manipulation"
+* 08-10: Moved the backend to it's own repository (for everyone's ease), and updated instructions accordingly in section 3. If you copied the backend from CSE servers prior to 3am on the 8th October, you will likely want to delete that folder and clone the new repository there.
 
 ## 1. Background & Motivation
 
@@ -163,17 +165,19 @@ Users can access different pages using URL fragments:
 
 ## 3. The Support (Backend) - no work required
 
-The backend server is not part of your repository (due to it's size). You can easily add it to your repository by, in your project root folder:
- * Locally, running `scp -r z5555555@cse.unsw.edu.au:~cs6080/public_html/20T3/assignments/ass2/backend/* ./backend`
- * On CSE machines, running `cp -r ~cs6080/public_html/20T3/assignments/ass2/backend/* ./backend`
+The backend server is not part of your repository (due to it's size). However, we have put it on a publically accessible repo (so only one copy, rather than separate repos deployed to every student).
 
-Once you have copied all of the relevant files, you can view the `README.md` in the `backend` folder to see how to get the server running.
+<a href="https://gitlab.cse.unsw.edu.au/COMP6080/20T3/ass2-backend">You can access the backend repository here</a>. Clone this repository onto your working machine.
+
+Once cloned, you can view the `README.md` in new repository to see how to get the server running.
 
 The backend server will be where you'll be getting your data. Don't touch the code in the backend; although we've provided the source, it's meant to be a black box. Final testing will be done with our own backend. Use the instructions provided in the backend/README.md to get it started.
 
 For the full docs on the API, start the backend server and navigate to the root URL in a web browser (very likely to be `localhost:5000`). You'll see all the endpoints, descriptions and expected responses.
 
 Your backend server must be running for your frontend to interact with it. Your frontend must call the backend server on the correct port.
+
+**Please `git pull` on the backend server at least every couple of days. We will no doubt be pushing fixes and clarifications as they arise over the first week. `git pull` before you work will give you the latest changes.**
 
 ## 4. Constraints & Assumptions
 
@@ -196,6 +200,13 @@ You should ensure that your programs have been tested on one of the following tw
 ### 4.4. Other Requirements
  * The specification is intentionally vague to allow you to build frontend components however you think are visually appropriate. Their size, positioning, colour, layout, is in virtually all cases completely up to you. We require some basic criteria, but it's mainly dictating elements and behaviour.
  * This is not a design assignment. You are expected to show common sense and critical thinking when it comes to basic user experience and visual layout, but you are not required to be creative to achieve full marks.
+
+### 4.5. Static HTML, innerHTML, DOM manipulation
+
+In this assignment, you are:
+ * Allowed to add static HTML/CSS to the stub website provided (i.e. you can put raw HTML/CSS as if its a static page, even if you then later manipulate it with Javascript).
+ * Allowed to build HTML elements and add CSS properties to the DOM via javascript. We expect this to be the most common way students build these pages
+ * Are **not** allowed to use the `innerHTML` property of nodes/tags to set the inner HTML of an element. This has security vulnerabilities and is in general not best practice. Either statically add the HTML/CSS and manipulate it with javascript, or generate and build nodes/elements in Javascript (just like lectures/tutes/labs), or both. But don't set inner HTML.
 
 ## 5. Marking Criteria
 
@@ -273,6 +284,12 @@ submit is your own work (as described above).
 
 Note you will not be penalized if your work has the potential to be taken without your consent or
 knowledge.
+
+**For students who completed COMP2041 in 2018**, this assignment is very similar to another you would 
+have completed. Please remember that UNSW plagiarism guidelines prevent you from using your previous work
+in other courses. This means you must complete this assignment without using/copying any code from
+other assignments. Generally though, this should be OK, as since it's been quite a while since COMP2041
+I am sure many students will not want to reuse their approaches from less-knowledgable selves.
 
 ## 7. Submission
 
