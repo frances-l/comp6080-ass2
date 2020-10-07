@@ -13,7 +13,7 @@
 
 * 08-10: Clarity given in plagiarism section for students who have done COMP2014 in 2018.
 * 08-10: Added section "4.5. Static HTML, innerHTML, DOM manipulation"
-* 08-10: Moved the backend to it's own repository (for everyone's ease), and updated instructions accordingly in section 3
+* 08-10: Moved the backend to it's own repository (for everyone's ease), and updated instructions accordingly in section 3. If you copied the backend from CSE servers prior to 3am on the 8th October, you will likely want to delete that folder and clone the new repository there.
 
 ## 1. Background & Motivation
 
