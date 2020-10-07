@@ -169,7 +169,7 @@ The backend server is not part of your repository (due to it's size). However, w
 
 <a href="https://gitlab.cse.unsw.edu.au/COMP6080/20T3/ass2-backend">You can access the backend repository here</a>. Clone this repository onto your working machine.
 
-Once cloned, you can view the `README.md` in the `backend` folder to see how to get the server running.
+Once cloned, you can view the `README.md` in new repository to see how to get the server running.
 
 The backend server will be where you'll be getting your data. Don't touch the code in the backend; although we've provided the source, it's meant to be a black box. Final testing will be done with our own backend. Use the instructions provided in the backend/README.md to get it started.
 
