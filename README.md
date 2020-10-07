@@ -13,6 +13,7 @@
 
 * 08-10: Clarity given in plagiarism section for students who have done COMP2014 in 2018.
 * 08-10: Added section "4.5. Static HTML, innerHTML, DOM manipulation"
+* 08-10: Moved the backend to it's own repository (for everyone's ease), and updated instructions accordingly in section 3
 
 ## 1. Background & Motivation
 
@@ -164,17 +165,19 @@ Users can access different pages using URL fragments:
 
 ## 3. The Support (Backend) - no work required
 
-The backend server is not part of your repository (due to it's size). You can easily add it to your repository by, in your project root folder:
- * Locally, running `scp -r z5555555@cse.unsw.edu.au:~cs6080/public_html/20T3/assignments/ass2/backend/* ./backend`
- * On CSE machines, running `cp -r ~cs6080/public_html/20T3/assignments/ass2/backend/* ./backend`
+The backend server is not part of your repository (due to it's size). However, we have put it on a publically accessible repo (so only one copy, rather than separate repos deployed to every student).
 
-Once you have copied all of the relevant files, you can view the `README.md` in the `backend` folder to see how to get the server running.
+<a href="https://gitlab.cse.unsw.edu.au/COMP6080/20T3/ass2-backend">You can access the backend repository here</a>. Clone this repository onto your working machine.
+
+Once cloned, you can view the `README.md` in the `backend` folder to see how to get the server running.
 
 The backend server will be where you'll be getting your data. Don't touch the code in the backend; although we've provided the source, it's meant to be a black box. Final testing will be done with our own backend. Use the instructions provided in the backend/README.md to get it started.
 
 For the full docs on the API, start the backend server and navigate to the root URL in a web browser (very likely to be `localhost:5000`). You'll see all the endpoints, descriptions and expected responses.
 
 Your backend server must be running for your frontend to interact with it. Your frontend must call the backend server on the correct port.
+
+**Please `git pull` on the backend server at least every couple of days. We will no doubt be pushing fixes and clarifications as they arise over the first week. `git pull` before you work will give you the latest changes.**
 
 ## 4. Constraints & Assumptions
 
