@@ -1,27 +1,11 @@
-// importing named exports we use brackets
-import { createPostTile, uploadImage } from './helpers.js';
-
-// when importing 'default' exports, use below syntax
 import API from './api.js';
+// A helper you may want to use when uploading new images to the server.
+import { fileToDataUrl } from './helpers.js';
 
-const api  = new API();
+// This url may need to change depending on what port your backend is running
+// on.
+const api = new API('http://localhost:5000');
 
-// we can use this single api request multiple times
-const feed = api.getFeed();
-
-feed
-.then(posts => {
-    posts.reduce((parent, post) => {
-
-        parent.appendChild(createPostTile(post));
-        
-        return parent;
-
-    }, document.getElementById('large-feed'))
-});
-
-// Potential example to upload an image
-const input = document.querySelector('input[type="file"]');
-
-input.addEventListener('change', uploadImage);
-
+// Example usage of makeAPIRequest method.
+api.makeAPIRequest('dummy/user')
+    .then(r => console.log(r));
