@@ -18,6 +18,10 @@
   * Section 2.5.4 updated with correct items described to pass in.
   * Section 2.6.1 updated to reflect that polling should be used, not `/latest`
   * Section 9 FAQ added
+  * Removed irrelevant helper functions in helper.js and api.js.
+  * Updated fileReader helper in helper.js to be more useful.
+  * Removed non compiling code from main.js.
+  * Added jsdoc comments to all initially provided code.
 
 ## 1. Background & Motivation
 
