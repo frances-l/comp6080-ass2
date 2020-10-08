@@ -11,9 +11,13 @@
 
 ## 0. Change Log
 
-* 08-10: Clarity given in plagiarism section for students who have done COMP2014 in 2018.
-* 08-10: Added section "4.5. Static HTML, innerHTML, DOM manipulation"
-* 08-10: Moved the backend to it's own repository (for everyone's ease), and updated instructions accordingly in section 3. If you copied the backend from CSE servers prior to 3am on the 8th October, you will likely want to delete that folder and clone the new repository there.
+* 08-10:
+  * Clarity given in plagiarism section for students who have done COMP2014 in 2018.
+  * Added section "4.5. Static HTML, innerHTML, DOM manipulation"
+  * Moved the backend to it's own repository (for everyone's ease), and updated instructions accordingly in section 3. If you copied the backend from CSE servers prior to 3am on the 8th October, you will likely want to delete that folder and clone the new repository there.
+  * Section 2.5.4 updated with correct items described to pass in.
+  * Section 2.6.1 updated to reflect that polling should be used, not `/latest`
+  * Section 9 FAQ added
 
 ## 1. Background & Motivation
 
@@ -80,8 +84,6 @@ Each post should display:
 4. How many likes it has (or none)
 5. The post description text
 6. How many comments the post has
-1. Who the post was made by
-2. The image itself
 
 Although this is not a graphic design exercise you should produce pages with a common and somewhat distinctive look-and-feel. You may find CSS useful for this.
 
@@ -131,8 +133,8 @@ Milestone 5 focuses on more advanced features that will take time to implement a
 ### 2.5.4. Updating the profile
 * Users can update their personal profile via (`PUT /user`) E.g:
   * Update email address
-  * Update their profile picture
   * Update password
+  * Update name
 
 ## 2.6. Milestone 6 - Challenge Components (`advanced`) (10%)
 
@@ -143,7 +145,9 @@ Milestone 5 focuses on more advanced features that will take time to implement a
 * If a user likes a post or comments on a post, the posts likes and comments should update without requiring a page reload/refresh.
 
 ### 2.6.1. Push Notifications
-* Users can receive push notifications when a user they follow posts an image. Notification can be accessed at (`GET /latest`)
+* Users can receive push notifications when a user they follow posts an image. To know whether someone or not has made a post, you must "poll" the server (i.e. intermittent requests, maybe every second, that check the state). 
+
+*Polling is very inefficient for browsers, but can often be used as it simplifies the technical needs on the server.*
 
 ## 2.7. Milestone 7 - Very Challenge Components (`advanced *= 2`) (5%)
 
@@ -305,4 +309,7 @@ If your assignment is submitted after this date, each hour it is late reduces th
 
 For example if an assignment you submitted with a raw awarded mark of 85% was submitted 5 hours late, the late submission would have no effect (as maximum mark would be 90%). If the same assignment was submitted 20 hours late it would be awarded 60%, the maximum mark it can achieve at that time.
 
+## 9. FAQ
 
+Q. Is the dummy Anon user initially following anyone?
+A. No, you will need to manually follow people in order to get `GET /dummy/user/feed` returning something useful
