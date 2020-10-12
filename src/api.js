@@ -1,6 +1,8 @@
-// change this when you integrate with the real API, or when u start using the dev server
-const API_URL = 'http://localhost:8080/data'
-
+/**
+ * Make a request to `path` with `options` and parse the response as JSON.
+ * @param {*} path The url to make the reques to.
+ * @param {*} options Additiona options to pass to fetch.
+ */
 const getJSON = (path, options) => 
     fetch(path, options)
         .then(res => res.json())
@@ -8,18 +10,15 @@ const getJSON = (path, options) =>
 
 /**
  * This is a sample class API which you may base your code on.
- * You don't have to do this as a class.
+ * You may use this as a launch pad but do not have to.
  */
 export default class API {
-
-    /**
-     * Defaults to teh API URL
-     * @param {string} url 
-     */
-    constructor(url = API_URL) {
+    /** @param {String} url */
+    constructor(url) {
         this.url = url;
     } 
 
+    /** @param {String} path */
     makeAPIRequest(path) {
         return getJSON(`${this.url}/${path}`);
     }

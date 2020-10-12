@@ -18,6 +18,10 @@
   * Section 2.5.4 updated with correct items described to pass in.
   * Section 2.6.1 updated to reflect that polling should be used, not `/latest`
   * Section 9 FAQ added
+  * Removed irrelevant helper functions in helper.js and api.js.
+  * Updated fileReader helper in helper.js to be more useful.
+  * Removed non compiling code from main.js.
+  * Added jsdoc comments to all initially provided code.
 
 ## 1. Background & Motivation
 
@@ -92,10 +96,10 @@ Although this is not a graphic design exercise you should produce pages with a c
 Milestone 3 focuses on a richer UX and will require some backend interaction.
 
 ### 2.3.1. Show Likes
-* Allow an option for a user to see a list of all users who have liked a post.
+* Allow a user to see a list of all users who have liked a post. You can just display all of them at once by default, or you can optionally (not required) toggle whether it's visible or not with a simple button.
 
 ### 2.3.2. Show Comments
-* Allow an option for a user to see all the comments on a post.
+* Allow a user to see all the comments on a post. You can just display all of them at once by default, or you can optionally (not required) toggle whether it's visible or not with a simple button.
 
 ### 2.3.3. Ability for you to like content
 * A logged in user can like a post on their feed and trigger a api request (`PUT /post/like`)
@@ -171,7 +175,9 @@ Users can access different pages using URL fragments:
 
 The backend server is not part of your repository (due to it's size). However, we have put it on a publically accessible repo (so only one copy, rather than separate repos deployed to every student).
 
-<a href="https://gitlab.cse.unsw.edu.au/COMP6080/20T3/ass2-backend">You can access the backend repository here</a>. Clone this repository onto your working machine.
+<a href="https://gitlab.cse.unsw.edu.au/COMP6080/20T3/ass2-backend">You can access the backend repository here</a>. Clone this repository onto your working machine. 
+
+`git clone gitlab@gitlab.cse.unsw.edu.au:COMP6080/20T3/ass2-backend backend`
 
 Once cloned, you can view the `README.md` in new repository to see how to get the server running.
 
