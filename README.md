@@ -22,6 +22,8 @@
   * Updated fileReader helper in helper.js to be more useful.
   * Removed non compiling code from main.js.
   * Added jsdoc comments to all initially provided code.
+* 12-10:
+  * Adding instructions in `2.` of how to run the frontend behind a HTTP server to more easily interact with backend.
 
 ## 1. Background & Motivation
 
@@ -43,6 +45,14 @@ Stub code has been provided to help you get started in:
  * `frontend/src/main.js`
 
 You can modify or delete this stub code of you choose. It's simply here to potentially provide some help.
+
+If you want more help getting started, you can see the Monday Week 5 Live Lecture.
+
+To work with your frontend code locally with the web server, you will have to run another web server to serve the frontend. To do this, in you rproject folder you can run:
+
+`$ python3 -m http.server`
+
+This will start up a second HTTP server where if you navigate to `http://localhost:8000` (or whatever URL it provides) it will run your `index.html`
 
 ### 2.1. Milestone 1 - Registration & Login (15%)
 
