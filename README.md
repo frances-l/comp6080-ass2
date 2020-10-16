@@ -28,6 +28,8 @@
   * Clarified that for 2.5.2 you are not required to upload a new image.
   * Clarification (here) that while the usage of async/await isn't banned in this assignment, we still discourage it's use because learning and understanding how promises work is a critical skill in the workforce.
   * Adding section 3.1 to give a bit of help in terms of both exploring the DB and some example usernames that already exist in the DB that you can follow. This should save some people some time.
+* 16-10:
+  * Profile pics no longer required to be displayed, since this information is not available in the backend.
 
 ## 1. Background & Motivation
 
@@ -126,7 +128,7 @@ Milestone 3 focuses on a richer UX and will require some backend interaction.
 ## 2.4. Milestone 4 - Other users & profiles (10%)
 
 ### 2.4.1. Profile View / Profile View
-* Let a user click on a user's name/picture from a post and see a page with the users name, profile pic, and other info.
+* Let a user click on a user's name/picture from a post and see a page with the users name, and any other info the backend provides.
 * The user should also see on this page all posts made by that person.
 * The user should be able to see their own page as well.
 
