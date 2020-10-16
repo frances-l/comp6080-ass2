@@ -24,6 +24,10 @@
   * Added jsdoc comments to all initially provided code.
 * 12-10:
   * Adding instructions in `2.` of how to run the frontend behind a HTTP server to more easily interact with backend.
+* 15-10:
+  * Clarified that for 2.5.2 you are not required to upload a new image.
+  * Clarification (here) that while the usage of async/await isn't banned in this assignment, we still discourage it's use because learning and understanding how promises work is a critical skill in the workforce.
+  * Adding section 3.1 to give a bit of help in terms of both exploring the DB and some example usernames that already exist in the DB that you can follow. This should save some people some time.
 
 ## 1. Background & Motivation
 
@@ -139,7 +143,7 @@ Milestone 5 focuses on more advanced features that will take time to implement a
 * Users can upload and post new content from a modal or seperate page via (`POST /post`)
 
 ### 2.5.2. Updating & deleting  a post
-* Let a user update a post they made or delete it via (`DELETE /post`) or (`PUT /post`)
+* Let a user update a post they made or delete it via (`DELETE /post`) or (`PUT /post`). You are not required to allow the user to be able to update the image of a post.
 
 ### 2.5.3. Leaving comments
 * Users can write comments on "posts" via (`POST post/comment`)
@@ -198,6 +202,22 @@ For the full docs on the API, start the backend server and navigate to the root 
 Your backend server must be running for your frontend to interact with it. Your frontend must call the backend server on the correct port.
 
 **Please `git pull` on the backend server at least every couple of days. We will no doubt be pushing fixes and clarifications as they arise over the first week. `git pull` before you work will give you the latest changes.**
+
+### 3.1. Exploring the DB
+
+If you're comfortable with basic SQL, in the `ass2-backend` folder, you can upload the `db/test.sqlite3` file to an online explorer such as (sqliteonline.com)[sqliteonline.com].
+
+To get started, though, here are some usernames that you can have test accounts "follow":
+* Andrew
+* Ava
+* Sarah
+* Matthew
+* Jack
+* Harper
+* Zoe
+* Amelia
+
+For example, after registering a user, you can call `PUT /user/follow` to follow one of these users. After that, if you call `GET /user/feed` you will be able to see updates on the feed.
 
 ## 4. Constraints & Assumptions
 
