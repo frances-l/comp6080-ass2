@@ -14,13 +14,56 @@
     <!-- This is an example app structure, you can modify this as much as you choose --> 
     <header class="banner">
         <h1>Quickpic</h1>
-        <ul class="nav">
-            <li class="nav-item">Item</li>
-            <li class="nav-item">Item</li>
+        <ul id="navNotLogged" class="nav" >
+            <li id=navLogin class="nav-item">Login</li>
+            <div id="loginModal" class="modal" >
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                        <p>Welcome back! Please enter in your details.</p>
+                        <form id="loginForm">
+                            <label>Username:</label>
+                            <input type="text" id="loginUsername"><br>
+                            <label>Password:</label>
+                            <input type="password" id="loginPassword">
+                            <br> <br>
+                            <input type="submit" id="loginSubmit"> 
+                            <!-- lmao wtf is happening in the line above :( -->
+                        </form>
+                </div>
+            </div>
+            <li id=navRegister class="nav-item">Register</li>
+            <div id="registerModal" class="modal" >
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                        <p>Nice to see you here!</p>
+                        <form id="registerForm">
+                            <label>Username:</label>
+                            <input type="text" id="registerUsername"><br>
+                            <label>Password:</label>
+                            <input type="password" id="registerPassword"><br>
+                            <label>Email:</label>
+                            <input type="text" id="registerEmail"><br>
+                            <label>Name:</label>
+                            <input type="text" id="registerName">
+                            <br> <br>
+                            <input type="submit" id="registerSubmit">
+                            <!-- lmao wtf is happening in the line above :( -->
+                        </form>
+                </div>
+            </div>
+        </ul>
+        <ul id="navLogged" class="nav">
+            <li id="navLogout" class="nav-item">Logout</li>
         </ul>
     </header>
     <main role="main">
         <!-- app goes here --> 
+        <div id="notLoggedIn">
+            <h1>Welcome to Quickpic!</h1>
+        </div>
+        <div id="loggedIn">
+            <h1>Not yet implemented</h1>
+        </div>
     </main>
     <footer>
         <p>&copy; Quickpic</p>
