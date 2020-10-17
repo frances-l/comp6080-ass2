@@ -299,8 +299,6 @@ Your assignment will be hand-marked by tutor(s) in the course according to the c
 	</tr>
 </table>
 
-Git commits as diary
-
 ## 6. Originality of Work
 
 The work you submit must be your own work.  Submission of work partially or completely derived from
