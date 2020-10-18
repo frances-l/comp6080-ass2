@@ -5,18 +5,20 @@
  */
 const getJSON = (path, options) => {
     return new Promise((resolve, reject) => {
-        fetch(path, options)
-            .then(response => {
-                if (response.status === 200) {
-                    resolve(response.json());
-                } else {
-                    response.text().then(decoded => {
-                        reject("hello " + decoded["message"]);
-                    }).catch(err => console.log('uh oh' + err));
-                }
-            })
-    })
-}
+        fetch(path, options).then((response) => {
+            if (response.status === 200) {
+                resolve(response.json());
+            } else {
+                response
+                    .text()
+                    .then((decoded) => {
+                        reject(decoded);
+                    })
+                    .catch((err) => console.log("uh oh" + err));
+            }
+        });
+    });
+};
 
 /**
  * This is a sample class API which you may base your code on.
@@ -26,7 +28,7 @@ export default class API {
     /** @param {String} url */
     constructor(url) {
         this.url = url;
-    } 
+    }
 
     /** @param {String} path */
     makeAPIRequest(path, options) {
@@ -36,28 +38,28 @@ export default class API {
     post(path, options) {
         return getJSON(`${this.url}/${path}`, {
             ...options,
-            method: 'POST',
+            method: "POST",
         });
     }
 
     put(path, options) {
         return getJSON(`${this.url}/${path}`, {
             ...options,
-            method: 'PUT',
+            method: "PUT",
         });
     }
 
     get(path, options) {
         return getJSON(`${this.url}/${path}`, {
             ...options,
-            method: 'GET',
+            method: "GET",
         });
     }
 
     delete(path, options) {
         return getJSON(`${this.url}/${path}`, {
             ...options,
-            method: 'DELETE',
+            method: "DELETE",
         });
     }
 }

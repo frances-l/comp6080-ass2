@@ -11,6 +11,12 @@
     <script type="module" src="src/api.js"></script>
 </head>
 <body>
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="errorMessage"></p>
+        </div>
+    </div>
     <!-- This is an example app structure, you can modify this as much as you choose --> 
     <header class="banner">
         <h1>Quickpic</h1>
@@ -27,7 +33,6 @@
                             <input type="password" id="loginPassword">
                             <br> <br>
                             <input type="submit" id="loginSubmit"> 
-                            <!-- lmao wtf is happening in the line above :( -->
                         </form>
                 </div>
             </div>
@@ -47,7 +52,6 @@
                             <input type="text" id="registerName">
                             <br> <br>
                             <input type="submit" id="registerSubmit">
-                            <!-- lmao wtf is happening in the line above :( -->
                         </form>
                 </div>
             </div>
