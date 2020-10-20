@@ -103,3 +103,50 @@ footer > * {
 #notLoggedIn {
     display: none;
 }
+
+#notFollowingAnyone {
+    display: none;
+}
+
+#mainFeed {
+    margin: auto;
+    /* text-align: center; */
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+}
+
+.post {
+    background-color: #fff;
+    width: 20em;
+    height: auto;
+    align-self: center;
+}
+
+.postImage {
+    max-width: 90%;
+    height: auto;
+    align-self: center;
+}
+
+.postImageContainer {
+    text-align: center;
+}
+
+.postText {
+    margin-left: 5%;
+}
+
+.postTime {
+    font-size: 12px;
+    color: #5e5e5e;
+}
+
+.likeCommentContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.likeCommentContainerElem {
+    margin-right: 2%;
+}

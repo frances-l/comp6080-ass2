@@ -1,6 +1,6 @@
 import API from "./api.js";
 // A helper you may want to use when uploading new images to the server.
-import { fileToDataUrl, raiseError } from "./helpers.js";
+import { fileToDataUrl, raiseError, getToken, displayPost } from "./helpers.js";
 
 // This url may need to change depending on what port your backend is running
 // on.
@@ -124,6 +124,42 @@ function yesToken() {
     document.getElementById("notLoggedIn").style.display = "none";
     document.getElementById("navLogged").style.display = "block";
     document.getElementById("loggedIn").style.display = "block";
+    const tok = getToken();
+    console.log(tok);
+
+    // api.put("user/follow?username=test", {
+    //     headers: {
+    //         Authorization: tok,
+    //         "Content-Type": "application/json",
+    //     },
+    // })
+    //     .then((data) => {
+    //         console.log("00", data);
+    //     })
+    //     .catch((err) => {
+    //         raiseError(err);
+    //     });
+
+    api.get("user/feed", {
+        headers: {
+            Authorization: tok,
+        },
+    })
+        .then((data) => {
+            console.log(data["posts"]);
+            displayPost(data["posts"][0]);
+            // if (data["posts"].length === 0) {
+            //     document.getElementById("notFollowingAnyone").style.display =
+            //         "block";
+            // } else {
+            //     document.getElementById("imgtest").src =
+            //         "data:img/png;base64," + data["posts"][0].thumbnail;
+            // }
+        })
+        .catch((err) => {
+            console.log(err);
+            raiseError(err);
+        });
 
     // logging out
     document.getElementById("navLogout").addEventListener("click", (e) => {
