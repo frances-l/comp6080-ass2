@@ -30,7 +30,9 @@
   * Adding section 3.1 to give a bit of help in terms of both exploring the DB and some example usernames that already exist in the DB that you can follow. This should save some people some time.
 * 16-10:
   * Profile pics no longer required to be displayed, since this information is not available in the backend.
-
+* 20/10:
+  * Removed another trailing reference to profile pic
+  
 ## 1. Background & Motivation
 
 Web-based applications are becoming the most common way to build a digital capability accessible to a mass audience. While there are modern tools that help us build these rapidly, it's important to understand the fundamental Javascript-based technology and architectures that exist, both to gain a deeper understanding for when these skills may be needed, but also to simply understand the mechanics of fundamental JS. Even when working with a high level framework like React, understanding (in-concept) the code that is transpiled-to will ensure you're a more well rounded web-based engineer.
@@ -128,7 +130,7 @@ Milestone 3 focuses on a richer UX and will require some backend interaction.
 ## 2.4. Milestone 4 - Other users & profiles (10%)
 
 ### 2.4.1. Profile View / Profile View
-* Let a user click on a user's name/picture from a post and see a page with the users name, and any other info the backend provides.
+* Let a user click on a user's name from a post and see a page with the users name, and any other info the backend provides.
 * The user should also see on this page all posts made by that person.
 * The user should be able to see their own page as well.
 
