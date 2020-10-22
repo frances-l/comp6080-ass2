@@ -112,15 +112,16 @@ footer > * {
     margin: auto;
     /* text-align: center; */
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     justify-content: center;
 }
 
 .post {
     background-color: #fff;
-    width: 20em;
+    width: 23em;
     height: auto;
     align-self: center;
+    margin-top: 5%;
 }
 
 .postImage {
@@ -149,4 +150,19 @@ footer > * {
 
 .likeCommentContainerElem {
     margin-right: 2%;
+}
+
+.count:hover,
+.count:focus {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.icon:hover,
+.icon:focus {
+    cursor: pointer;
+}
+
+.author {
+    font-weight: bold;
 }

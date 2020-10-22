@@ -1,5 +1,8 @@
 // import { yesToken, noToken } from "./main";
 
+import API from "./api.js";
+
+const api = new API("http://localhost:5000");
 /**
  * Given a js file object representing a jpg or png image, such as one taken
  * from a html file input element, return a promise which resolves to the file
@@ -49,13 +52,14 @@ export function getToken() {
 }
 
 export function displayPost(data) {
+    console.log(data);
     const feed = document.getElementById("mainFeed");
     const box = document.createElement("div");
     box.className = "post";
     // setting author
     const author = document.createElement("p");
     author.innerText = data["meta"].author;
-    author.className = "postText";
+    author.className = "postText author";
     box.appendChild(author);
 
     // setting image
@@ -73,21 +77,23 @@ export function displayPost(data) {
     const like = document.createElement("img");
     // icons from https://www.flaticon.com/authors/freepik
     like.src = "styles/like.svg";
-    like.className = "likeCommentContainerElem";
+    like.className = "likeCommentContainerElem icon";
     likeCommentContainer.appendChild(like);
     const likeCount = document.createElement("p");
     likeCount.innerText = data["meta"].likes.length;
-    likeCount.className = "likeCommentContainerElem";
+    likeCount.className = "likeCommentContainerElem count";
     likeCommentContainer.appendChild(likeCount);
 
     const comment = document.createElement("img");
     comment.src = "styles/comment.svg";
-    comment.className = "likeCommentContainerElem";
+    comment.className = "likeCommentContainerElem icon";
     likeCommentContainer.appendChild(comment);
     const commentCount = document.createElement("p");
     commentCount.innerText = data.comments.length;
-    commentCount.className = "likeCommentContainerElem";
+    commentCount.className = "likeCommentContainerElem count";
     likeCommentContainer.appendChild(commentCount);
+
+    likesAndCommentsEvents(data, like, likeCount, comment, commentCount);
 
     box.appendChild(likeCommentContainer);
 
@@ -109,7 +115,241 @@ export function displayPost(data) {
     feed.appendChild(box);
 }
 
-export function likesAndComments(data) {
-    const like = document.createElement("img");
-    like.src = "https://img.icons8.com/fluent-systems-filled/2x/like.png";
+export async function likesAndCommentsEvents(
+    data,
+    likeButton,
+    likeCount,
+    commentButton,
+    commentCount
+) {
+    // user is liking the post
+    const tok = getToken();
+    const user = await getUser(tok);
+    console.log(user);
+    console.log(data["meta"].likes);
+    let likeArray = data["meta"].likes;
+    let commentArray = data.comments;
+    likeButton.addEventListener("click", (e) => {
+        if (checkElem(likeArray, user.id) === false) {
+            // liking photo
+            console.log("llll", likeArray);
+            const path = "post/like?id=" + data.id;
+            api.put(path, {
+                headers: {
+                    Authorization: tok,
+                },
+            })
+                .then((data) => {
+                    likeCount.innerText = parseInt(likeCount.innerText) + 1;
+                    likeArray.push(user.id);
+                })
+                .catch((err) => {
+                    raiseError(err);
+                });
+        } else {
+            // unliking photo
+            const path = "post/unlike?id=" + data.id;
+            api.put(path, {
+                headers: {
+                    Authorization: tok,
+                },
+            })
+                .then((data) => {
+                    likeCount.innerText = parseInt(likeCount.innerText) - 1;
+                    console.log("aaaa", likeArray);
+                    for (let i = 0; i < likeArray.length; i++) {
+                        if (likeArray[i] === user.id) {
+                            likeArray.splice(i, 1);
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+
+            console.log("here");
+        }
+    });
+
+    likeCount.addEventListener("click", (e) => {
+        likeModal(likeArray);
+    });
+
+    commentButton.addEventListener("click", (e) => {
+        commentBox(data);
+    });
+
+    commentCount.addEventListener("click", (e) => {
+        console.log(commentArray);
+        commentFeed(commentArray);
+    });
+}
+
+function getUser(token, id = -1) {
+    if (id === -1) {
+        return api
+            .get("user", {
+                headers: {
+                    Authorization: token,
+                },
+            })
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                raiseError(err);
+            });
+    } else {
+        const path = "user?id=" + id;
+        return api
+            .get(path, {
+                headers: {
+                    Authorization: token,
+                },
+            })
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                raiseError(err);
+            });
+    }
+}
+
+function checkElem(array, element) {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] === element) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// receives likeArray to display the different users
+async function likeModal(likeArray) {
+    const likeModal = document.getElementById("likeModal");
+    likeModal.style.display = "block";
+    const likeModalContent = document.getElementById("likers");
+    const tok = getToken();
+    if (likeArray.length === 0) {
+        const noLike = document.createElement("p");
+        noLike.innerText = "Nobody has liked this yet :( Be the first one!";
+        likeModalContent.appendChild(noLike);
+    } else {
+        const likedBy = document.createElement("h3");
+        likedBy.innerText = "This post has been liked by:";
+        likeModalContent.append(likedBy);
+        for (let i = 0; i < likeArray.length; i++) {
+            let currUser = await getUser(tok, likeArray[i]);
+            let name = document.createElement("p");
+            name.innerText = currUser.username;
+            likeModalContent.appendChild(name);
+        }
+    }
+    closeModal();
+}
+
+export function closeModal() {
+    const likeModalContent = document.getElementById("likers");
+    const loginModal = document.getElementById("loginModal");
+    const registerModal = document.getElementById("registerModal");
+    const errorModal = document.getElementById("errorModal");
+    const likeModal = document.getElementById("likeModal");
+    const commentFeedModal = document.getElementById("commentFeedModal");
+    const commentModal = document.getElementById("commentModal");
+
+    window.addEventListener("click", (e) => {
+        switch (e.target) {
+            case loginModal:
+                loginModal.style.display = "none";
+                break;
+            case registerModal:
+                registerModal.style.display = "none";
+                break;
+            case errorModal:
+                errorModal.style.display = "none";
+                break;
+            case likeModal:
+                console.log("hereeee");
+                likeModal.style.display = "none";
+                while (likeModalContent.firstChild) {
+                    likeModalContent.removeChild(likeModalContent.lastChild);
+                }
+                break;
+            case commentModal:
+                commentModal.style.display = "none";
+        }
+    });
+
+    const errorClose = document.getElementsByClassName("close")[0];
+    const loginClose = document.getElementsByClassName("close")[1];
+    const registerClose = document.getElementsByClassName("close")[2];
+    const likeClose = document.getElementsByClassName("close")[3];
+    const commentFeedClose = document.getElementsByClassName("close")[4];
+    const commentClose = document.getElementsByClassName("close")[5];
+
+    loginClose.addEventListener("click", (e) => {
+        loginModal.style.display = "none";
+        console.log("does this work");
+    });
+
+    registerClose.addEventListener("click", (e) => {
+        registerModal.style.display = "none";
+        console.log("does this work 2");
+    });
+
+    errorClose.addEventListener("click", (e) => {
+        errorModal.style.display = "none";
+    });
+
+    likeClose.addEventListener("click", (e) => {
+        console.log("hello");
+        likeModal.style.display = "none";
+        while (likeModalContent.firstChild) {
+            likeModalContent.removeChild(likeModalContent.lastChild);
+        }
+    });
+
+    commentClose.addEventListener("click", (e) => {
+        commentModal.style.display = "none";
+    });
+}
+
+function commentBox(data, commentArray) {
+    console.log("yyyyyy");
+    const path = "post/comment?id=" + data.id;
+    const token = getToken();
+    const modal = document.getElementById("commentModal");
+    modal.style.display = "block";
+    document.getElementById("commentSubmit").addEventListener("click", (e) => {
+        e.preventDefault();
+        const com = document.getElementById("commentString").value;
+        api.put(path, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: token,
+            },
+            body: JSON.stringify({
+                comment: com,
+            }),
+        })
+            .then((modal.style.display = "none"))
+            .catch((err) => {
+                raiseError(err);
+            });
+    });
+    closeModal();
+}
+
+function commentFeed(commentArray) {
+    const comments = document.getElementById("comments");
+    for (let i = 0; i < commentArray.length; i++) {
+        const mainComment = document.createElement("div");
+        const author = document.createElement("p");
+        author.innerText = commentArray[i].author;
+        author.className = "author";
+        mainComment.appendChild(author);
+        console.log(author);
+        comments.appendChild(mainComment);
+    }
 }

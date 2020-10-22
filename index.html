@@ -66,10 +66,7 @@
             <h1>Welcome to Quickpic!</h1>
         </div>
         <div id="loggedIn">
-            <h1>Not yet implemented</h1>
             <div id="mainFeed">
-                <p>hello</p>
-                <p>testing here</p>
             </div>
             <div id="notFollowingAnyone">
                 <h1>You currently aren't following anyone. Go and follow someone to check out what they're up to!</h1>
@@ -79,6 +76,28 @@
     <footer>
         <p>&copy; Quickpic</p>
     </footer>
+    <div id="likeModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="likers"></div>
+        </div>
+    </div>
+    <div id="commentFeedModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="comments"></div>
+        </div>
+    </div>
+    <div id="commentModal" class="modal"> 
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="commentForm">
+                <label>Enter your comment here:</label>
+                <input type="text" id="commentString"><br>
+                <input type="submit" id="commentSubmit">
+            </form>
+        </div>
+    </div>
     <script type="module" src="src/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </body>
