@@ -5,6 +5,7 @@ import {
     raiseError,
     closeModal,
     getUser,
+    checkElem,
 } from "./helpers.js";
 import { displayPost } from "./posts.js";
 
@@ -39,14 +40,39 @@ export async function displayProfile(user) {
     following.appendChild(followingNum);
     profileBox.appendChild(following);
 
+    const requestingUser = await getUser(token);
+
+    // follow/unfollow button
     const follow = document.createElement("button");
-    follow.innerText = "follow " + user.username;
+    if (checkElem(requestingUser["following"], user.id) === true) {
+        console.log(11111111);
+        follow.innerText = "unfollow " + user.username;
+    } else {
+        follow.innerText = "follow " + user.username;
+    }
+
     profileBox.appendChild(follow);
 
     follow.addEventListener("click", async (e) => {
-        const requestingUser = await getUser(token);
         if (requestingUser.username === user.username) {
-            console.log("same");
+            const message = document.getElementById("errorMessage");
+            message.innerText = "You cannot follow yourself!";
+            const errorModal = document.getElementById("errorModal");
+            errorModal.style.display = "block";
+        } else {
+            const path = "user/follow?username=" + user.username;
+            api.put(path, {
+                headers: {
+                    Authorization: token,
+                },
+            })
+                .then((data) => {
+                    console.log(data);
+                    follow.innerText = "unfollow " + user.username;
+                })
+                .catch((err) => {
+                    raiseError(err);
+                });
         }
     });
 
@@ -75,8 +101,15 @@ export async function displayProfile(user) {
 
     mainFeed.appendChild(profileBox);
 
-    for (let i = 0; i < user["posts"].length; i++) {
-        const path = "post?id=" + user["posts"][i];
+    displayUserPost(user["posts"]);
+
+    closeModal();
+}
+
+function displayUserPost(postArray) {
+    const token = getToken();
+    for (let i = 0; i < postArray.length; i++) {
+        const path = "post?id=" + postArray[i];
         api.get(path, {
             headers: {
                 Authorization: token,
@@ -89,6 +122,4 @@ export async function displayProfile(user) {
                 raiseError(err);
             });
     }
-
-    closeModal();
 }

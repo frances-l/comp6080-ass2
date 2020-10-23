@@ -6,6 +6,7 @@ import {
     raiseError,
     closeModal,
     getUserUsername,
+    checkElem,
 } from "./helpers.js";
 
 import { displayProfile } from "./profile.js";
@@ -152,15 +153,6 @@ export async function likesAndCommentsEvents(
     commentCount.addEventListener("click", (e) => {
         commentFeed(commentArray);
     });
-}
-
-function checkElem(array, element) {
-    for (let i = 0; i < array.length; i++) {
-        if (array[i] === element) {
-            return true;
-        }
-    }
-    return false;
 }
 
 // receives likeArray to display the different users

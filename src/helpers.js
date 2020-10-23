@@ -40,7 +40,9 @@ export function fileToDataUrl(file) {
  * @param {JSON} err
  */
 export function raiseError(err) {
+    console.log(999);
     const decode = JSON.parse(err);
+    console.log(8888);
     const message = document.getElementById("errorMessage");
     message.innerText = decode.message;
     const errorModal = document.getElementById("errorModal");
@@ -65,6 +67,7 @@ export function getUser(token, id = -1) {
                 return data;
             })
             .catch((err) => {
+                console.log(err);
                 raiseError(err);
             });
     } else {
@@ -194,4 +197,13 @@ export function closeModal() {
             followingContent.removeChild(followingContent.lastChild);
         }
     });
+}
+
+export function checkElem(array, element) {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] === element) {
+            return true;
+        }
+    }
+    return false;
 }
