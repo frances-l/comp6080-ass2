@@ -46,7 +46,9 @@ export function raiseError(err) {
     const errorModal = document.getElementById("errorModal");
     errorModal.style.display = "block";
 }
-
+/**
+ * Gets the authorization token of the currently logged in user
+ */
 export function getToken() {
     return "Token " + localStorage.getItem("token");
 }
@@ -105,8 +107,18 @@ export function displayPost(data) {
 
     // getting update time
     let postTime = data["meta"].published;
-    postTime = new moment(parseInt(postTime) * 1000);
-    const timeString = "posted on " + postTime.format("DD/MM/YYYY h:mm:ss a");
+    postTime = new Date(parseInt(postTime) * 1000);
+    const timeString =
+        "posted on " +
+        postTime.getDate() +
+        "/" +
+        postTime.getMonth() +
+        "/" +
+        postTime.getFullYear() +
+        " " +
+        postTime.getHours() +
+        ":" +
+        postTime.getMinutes();
     const time = document.createElement("p");
     time.innerText = timeString;
     time.className = "postTime postText";
@@ -176,7 +188,7 @@ export async function likesAndCommentsEvents(
     });
 
     commentButton.addEventListener("click", (e) => {
-        commentBox(data);
+        commentArray = commentBox(data, commentArray, commentCount);
     });
 
     commentCount.addEventListener("click", (e) => {
@@ -257,6 +269,7 @@ export function closeModal() {
     const likeModal = document.getElementById("likeModal");
     const commentFeedModal = document.getElementById("commentFeedModal");
     const commentModal = document.getElementById("commentModal");
+    const commentModalContent = document.getElementById("comments");
 
     window.addEventListener("click", (e) => {
         switch (e.target) {
@@ -278,6 +291,15 @@ export function closeModal() {
                 break;
             case commentModal:
                 commentModal.style.display = "none";
+                break;
+            case commentFeedModal:
+                commentFeedModal.style.display = "none";
+                while (commentModalContent.firstChild) {
+                    commentModalContent.removeChild(
+                        commentModalContent.lastChild
+                    );
+                }
+                break;
         }
     });
 
@@ -313,9 +335,16 @@ export function closeModal() {
     commentClose.addEventListener("click", (e) => {
         commentModal.style.display = "none";
     });
+
+    commentFeedClose.addEventListener("click", (e) => {
+        commentFeedModal.style.display = "none";
+        while (commentModalContent.firstChild) {
+            commentModalContent.removeChild(commentModalContent.lastChild);
+        }
+    });
 }
 
-function commentBox(data, commentArray) {
+function commentBox(data, commentArray, commentCount) {
     console.log("yyyyyy");
     const path = "post/comment?id=" + data.id;
     const token = getToken();
@@ -333,23 +362,72 @@ function commentBox(data, commentArray) {
                 comment: com,
             }),
         })
-            .then((modal.style.display = "none"))
+            .then(async () => {
+                modal.style.display = "none";
+                const text = await pushComment(com);
+                console.log("wwwwww", text);
+                console.log("aaaaaa", commentArray);
+                commentArray.push(text);
+                commentCount.innerText = parseInt(commentCount.innerText) + 1;
+                console.log("pppppp", commentArray);
+            })
             .catch((err) => {
                 raiseError(err);
             });
     });
     closeModal();
+    console.log("xxxxxx", commentArray);
+    return commentArray;
 }
 
 function commentFeed(commentArray) {
     const comments = document.getElementById("comments");
+    const header = document.createElement("h2");
+    header.innerText = "Comments";
+    comments.appendChild(header);
+    document.getElementById("commentFeedModal").style.display = "block";
     for (let i = 0; i < commentArray.length; i++) {
         const mainComment = document.createElement("div");
         const author = document.createElement("p");
         author.innerText = commentArray[i].author;
         author.className = "author";
         mainComment.appendChild(author);
-        console.log(author);
+        const comment = document.createElement("p");
+        comment.innerText = commentArray[i].comment;
+        mainComment.appendChild(comment);
+        const time = new Date(parseInt(commentArray[i].published) * 1000);
+        const timestamp = document.createElement("p");
+        timestamp.innerText =
+            "commented on " +
+            time.getDate() +
+            "/" +
+            time.getMonth() +
+            "/" +
+            time.getFullYear() +
+            " " +
+            time.getHours() +
+            ":" +
+            time.getMinutes();
+        timestamp.className = "postTime";
+        const test = new Date();
+        console.log(test.getTime() / 1000);
+        console.log(test.getTime());
+        mainComment.appendChild(timestamp);
         comments.appendChild(mainComment);
     }
+    closeModal();
+}
+
+async function pushComment(com) {
+    const token = getToken();
+    const user = await getUser(token);
+    let time = new Date();
+    time = time.getTime() / 1000;
+    const text = {
+        author: user.username,
+        published: time,
+        comment: com,
+    };
+    console.log("pushComment", text);
+    return text;
 }

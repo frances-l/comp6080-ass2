@@ -26,6 +26,7 @@ footer {
     background-color: white;
     min-height: 60px;
     text-align: right;
+    margin-top: 5%;
 }
 
 .banner > *,
@@ -66,6 +67,9 @@ footer > * {
 .modal-content {
     background-color: #fefefe;
     margin: auto;
+    max-height: 70%;
+    max-width: 80%;
+    overflow: auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
