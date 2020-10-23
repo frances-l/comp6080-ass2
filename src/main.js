@@ -1,12 +1,8 @@
 import API from "./api.js";
 // A helper you may want to use when uploading new images to the server.
-import {
-    fileToDataUrl,
-    raiseError,
-    getToken,
-    displayPost,
-    closeModal,
-} from "./helpers.js";
+import { fileToDataUrl, raiseError, getToken, closeModal } from "./helpers.js";
+
+import { displayPost } from "./posts.js";
 
 // This url may need to change depending on what port your backend is running
 // on.

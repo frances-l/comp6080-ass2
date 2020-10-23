@@ -73,6 +73,7 @@ footer > * {
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+    border-radius: 10px;
 }
 
 /* The Close Button */
@@ -169,4 +170,18 @@ footer > * {
 
 .author {
     font-weight: bold;
+}
+
+.author:hover,
+.author:focus {
+    cursor: pointer;
+}
+
+.profileBox {
+    width: 50%;
+    align-self: center;
+    background-color: #fff;
+    align-items: center;
+    text-align: center;
+    margin-top: 5%;
 }
