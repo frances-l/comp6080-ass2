@@ -4,19 +4,18 @@ import {
     getToken,
     raiseError,
     closeModal,
+    getUser,
 } from "./helpers.js";
 import { displayPost } from "./posts.js";
 
 const api = new API("http://localhost:5000");
 
-export async function displayProfile(data) {
+export async function displayProfile(user) {
     const mainFeed = document.getElementById("mainFeed");
     while (mainFeed.firstChild) {
         mainFeed.removeChild(mainFeed.lastChild);
     }
     const token = getToken();
-    const user = await getUserUsername(token, data["meta"].author);
-    console.log(user);
     const profileBox = document.createElement("div");
     profileBox.className = "profileBox";
 
@@ -44,11 +43,14 @@ export async function displayProfile(data) {
     follow.innerText = "follow " + user.username;
     profileBox.appendChild(follow);
 
-    follow.addEventListener("click", (e) => {
-        console.log("ppp");
+    follow.addEventListener("click", async (e) => {
+        const requestingUser = await getUser(token);
+        if (requestingUser.username === user.username) {
+            console.log("same");
+        }
     });
 
-    followingNum.addEventListener("click", (e) => {
+    followingNum.addEventListener("click", async (e) => {
         console.log(99999);
         const followingModal = document.getElementById("followingModal");
         followingModal.style.display = "block";
@@ -63,7 +65,10 @@ export async function displayProfile(data) {
             followingContent.appendChild(currentlyFollowing);
 
             for (let i = 0; i < user["following"].length; i++) {
-                console.log("llll");
+                let currentUser = await getUser(token, user["following"][i]);
+                let currentUsername = document.createElement("p");
+                currentUsername.innerText = currentUser.username;
+                followingContent.appendChild(currentUsername);
             }
         }
     });

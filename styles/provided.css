@@ -185,3 +185,9 @@ footer > * {
     text-align: center;
     margin-top: 5%;
 }
+
+#home:hover,
+#home:focus {
+    cursor: pointer;
+    text-decoration: underline;
+}

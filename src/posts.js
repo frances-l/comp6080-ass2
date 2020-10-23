@@ -1,22 +1,30 @@
 import API from "./api.js";
 
-import { getToken, getUser, raiseError, closeModal } from "./helpers.js";
+import {
+    getToken,
+    getUser,
+    raiseError,
+    closeModal,
+    getUserUsername,
+} from "./helpers.js";
 
 import { displayProfile } from "./profile.js";
 
 const api = new API("http://localhost:5000");
 
 export function displayPost(data) {
-    console.log("we are here", data);
+    const token = getToken();
     const feed = document.getElementById("mainFeed");
+
     const box = document.createElement("div");
     box.className = "post";
     // setting author
     const author = document.createElement("p");
     author.innerText = data["meta"].author;
     author.className = "postText author";
-    author.addEventListener("click", (e) => {
-        displayProfile(data);
+    author.addEventListener("click", async (e) => {
+        const user = await getUserUsername(token, data["meta"].author);
+        displayProfile(user);
     });
     box.appendChild(author);
 
@@ -93,14 +101,11 @@ export async function likesAndCommentsEvents(
     // user is liking the post
     const tok = getToken();
     const user = await getUser(tok);
-    console.log(user);
-    console.log(data["meta"].likes);
     let likeArray = data["meta"].likes;
     let commentArray = data.comments;
     likeButton.addEventListener("click", (e) => {
         if (checkElem(likeArray, user.id) === false) {
             // liking photo
-            console.log("llll", likeArray);
             const path = "post/like?id=" + data.id;
             api.put(path, {
                 headers: {
@@ -124,7 +129,6 @@ export async function likesAndCommentsEvents(
             })
                 .then((data) => {
                     likeCount.innerText = parseInt(likeCount.innerText) - 1;
-                    console.log("aaaa", likeArray);
                     for (let i = 0; i < likeArray.length; i++) {
                         if (likeArray[i] === user.id) {
                             likeArray.splice(i, 1);
@@ -132,10 +136,8 @@ export async function likesAndCommentsEvents(
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    raiseError(err);
                 });
-
-            console.log("here");
         }
     });
 
@@ -148,7 +150,6 @@ export async function likesAndCommentsEvents(
     });
 
     commentCount.addEventListener("click", (e) => {
-        console.log(commentArray);
         commentFeed(commentArray);
     });
 }

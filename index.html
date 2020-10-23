@@ -19,7 +19,7 @@
     </div>
     <!-- This is an example app structure, you can modify this as much as you choose --> 
     <header class="banner">
-        <h1>Quickpic</h1>
+        <h1 id="home">Quickpic</h1>
         <ul id="navNotLogged" class="nav" >
             <li id=navLogin class="nav-item">Login</li>
             <div id="loginModal" class="modal" >
@@ -57,6 +57,7 @@
             </div>
         </ul>
         <ul id="navLogged" class="nav">
+            <li id="navProfile" class="nav-item">My Profile</li>
             <li id="navLogout" class="nav-item">Logout</li>
         </ul>
     </header>
@@ -105,6 +106,5 @@
         </div>
     </div>
     <script type="module" src="src/main.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 </body>
 </html>

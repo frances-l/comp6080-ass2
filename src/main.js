@@ -1,8 +1,15 @@
 import API from "./api.js";
 // A helper you may want to use when uploading new images to the server.
-import { fileToDataUrl, raiseError, getToken, closeModal } from "./helpers.js";
+import {
+    fileToDataUrl,
+    raiseError,
+    getToken,
+    closeModal,
+    getUser,
+} from "./helpers.js";
 
 import { displayPost } from "./posts.js";
+import { displayProfile } from "./profile.js";
 
 // This url may need to change depending on what port your backend is running
 // on.
@@ -137,7 +144,7 @@ function yesToken() {
                 document.getElementById("notFollowingAnyone").style.display =
                     "block";
             } else {
-                console.log(data);
+                console.log(232323232, data);
                 console.log(data["posts"].length);
                 for (let i = 0; i < data["posts"].length; i++) {
                     displayPost(data["posts"][i]);
@@ -149,6 +156,37 @@ function yesToken() {
             raiseError(err);
         });
 
+    const home = document.getElementById("home");
+    home.addEventListener("click", (e) => {
+        api.get("user/feed", {
+            headers: {
+                Authorization: tok,
+            },
+        })
+            .then((data) => {
+                //   console.log(data["posts"]);
+                //   displayPost(data["posts"][0]);
+                let feed = document.getElementById("mainFeed");
+                while (feed.firstChild) {
+                    feed.removeChild(feed.lastChild);
+                }
+                if (data["posts"].length === 0) {
+                    document.getElementById(
+                        "notFollowingAnyone"
+                    ).style.display = "block";
+                } else {
+                    console.log(data);
+                    console.log(data["posts"].length);
+                    for (let i = 0; i < data["posts"].length; i++) {
+                        displayPost(data["posts"][i]);
+                    }
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                raiseError(err);
+            });
+    });
     // logging out
     document.getElementById("navLogout").addEventListener("click", (e) => {
         document.getElementById("navLogged").style.display = "none";
@@ -163,6 +201,13 @@ function yesToken() {
         localStorage.removeItem("token");
         checkLocalStorage();
     });
+
+    document
+        .getElementById("navProfile")
+        .addEventListener("click", async (e) => {
+            const user = await getUser(tok);
+            displayProfile(user);
+        });
 }
 
 // checking that user has logged in
