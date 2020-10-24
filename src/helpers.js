@@ -114,6 +114,7 @@ export function closeModal() {
     const commentModalContent = document.getElementById("comments");
     const followingModal = document.getElementById("followingModal");
     const followingContent = document.getElementById("following");
+    const updateModal = document.getElementById("updateModal");
 
     window.addEventListener("click", (e) => {
         switch (e.target) {
@@ -127,7 +128,6 @@ export function closeModal() {
                 errorModal.style.display = "none";
                 break;
             case likeModal:
-                console.log("hereeee");
                 likeModal.style.display = "none";
                 while (likeModalContent.firstChild) {
                     likeModalContent.removeChild(likeModalContent.lastChild);
@@ -138,15 +138,12 @@ export function closeModal() {
                 break;
             case commentFeedModal:
                 commentFeedModal.style.display = "none";
-                while (commentModalContent.firstChild) {
-                    commentModalContent.removeChild(
-                        commentModalContent.lastChild
-                    );
-                }
                 break;
             case followingModal:
                 followingModal.style.display = "none";
                 break;
+            case updateModal:
+                updateModal.style.display = "none";
         }
     });
 
@@ -195,6 +192,30 @@ export function closeModal() {
         followingModal.style.display = "none";
         while (followingContent.firstChild) {
             followingContent.removeChild(followingContent.lastChild);
+        }
+    });
+
+    window.addEventListener("keydown", (e) => {
+        if (e.code === "Escape") {
+            followingModal.style.display = "none";
+
+            commentFeedModal.style.display = "none";
+            while (commentModalContent.firstChild) {
+                commentModalContent.removeChild(commentModalContent.lastChild);
+            }
+
+            commentModal.style.display = "none";
+
+            likeModal.style.display = "none";
+            while (likeModalContent.firstChild) {
+                likeModalContent.removeChild(likeModalContent.lastChild);
+            }
+
+            errorModal.style.display = "none";
+
+            registerModal.style.display = "none";
+
+            loginModal.style.display = "none";
         }
     });
 }

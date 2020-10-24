@@ -105,6 +105,7 @@ export async function likesAndCommentsEvents(
     const user = await getUser(tok);
     let likeArray = data["meta"].likes;
     let commentArray = data.comments;
+    console.log(61161616, data.id);
     likeButton.addEventListener("click", (e) => {
         if (checkElem(likeArray, user.id) === false) {
             // liking photo
@@ -148,7 +149,7 @@ export async function likesAndCommentsEvents(
     });
 
     commentButton.addEventListener("click", (e) => {
-        commentArray = commentBox(data, commentArray, commentCount);
+        commentArray = commentBox(data, commentArray, commentCount, data.id);
     });
 
     commentCount.addEventListener("click", (e) => {
@@ -161,6 +162,9 @@ async function likeModal(likeArray) {
     const likeModal = document.getElementById("likeModal");
     likeModal.style.display = "block";
     const likeModalContent = document.getElementById("likers");
+    while (likeModalContent.firstChild) {
+        likeModalContent.removeChild(likeModalContent.lastChild);
+    }
     const tok = getToken();
     if (likeArray.length === 0) {
         const noLike = document.createElement("p");
@@ -178,9 +182,6 @@ async function likeModal(likeArray) {
             name.addEventListener("click", (e) => {
                 likeModal.style.display = "none";
                 displayProfile(currUser);
-                while (likeModalContent.firstChild) {
-                    likeModalContent.removeChild(likeModalContent.lastChild);
-                }
             });
             likeModalContent.appendChild(name);
         }
@@ -188,10 +189,13 @@ async function likeModal(likeArray) {
     closeModal();
 }
 
-function commentBox(data, commentArray, commentCount) {
+function commentBox(data, commentArray, commentCount, id) {
+    console.log(8181811, data);
     console.log("yyyyyy");
     const path = "post/comment?id=" + data.id;
+    console.log(path);
     const token = getToken();
+    let count = 0;
     const modal = document.getElementById("commentModal");
     modal.style.display = "block";
     document.getElementById("commentSubmit").addEventListener("click", (e) => {
@@ -207,13 +211,21 @@ function commentBox(data, commentArray, commentCount) {
             }),
         })
             .then(async () => {
-                modal.style.display = "none";
-                const text = await pushComment(com);
-                console.log("wwwwww", text);
-                console.log("aaaaaa", commentArray);
-                commentArray.push(text);
-                commentCount.innerText = parseInt(commentCount.innerText) + 1;
-                console.log("pppppp", commentArray);
+                console.log(54545454, data);
+                if (data.id === id) {
+                    modal.style.display = "none";
+                    console.log(1111111);
+                    if (count == 0) {
+                        const text = await pushComment(com);
+                        console.log("wwwwww", text);
+                        console.log("aaaaaa", commentArray);
+                        commentArray.push(text);
+                        commentCount.innerText =
+                            parseInt(commentCount.innerText) + 1;
+                        console.log("pppppp", commentArray);
+                        count = count + 1;
+                    }
+                }
             })
             .catch((err) => {
                 raiseError(err);
@@ -226,7 +238,11 @@ function commentBox(data, commentArray, commentCount) {
 
 function commentFeed(commentArray) {
     const comments = document.getElementById("comments");
-    document.getElementById("commentFeedModal").style.display = "block";
+    while (comments.firstChild) {
+        comments.removeChild(comments.lastChild);
+    }
+    const commentFeedModal = document.getElementById("commentFeedModal");
+    commentFeedModal.style.display = "block";
     if (commentArray.length === 0) {
         const noComments = document.createElement("p");
         noComments.innerText =
@@ -249,8 +265,7 @@ function commentFeed(commentArray) {
                     commentArray[i].author
                 );
                 displayProfile(user);
-                document.getElementById("commentFeedModal").style.display =
-                    "none";
+                commentFeedModal.style.display = "none";
             });
             mainComment.appendChild(author);
             const comment = document.createElement("p");
@@ -270,7 +285,6 @@ function commentFeed(commentArray) {
                 ":" +
                 time.getMinutes();
             timestamp.className = "postTime";
-            const test = new Date();
             mainComment.appendChild(timestamp);
             comments.appendChild(mainComment);
         }

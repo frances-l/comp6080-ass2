@@ -217,3 +217,9 @@ footer > * {
         font-size: 12px;
     }
 }
+
+#updateButtonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
