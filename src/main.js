@@ -8,7 +8,7 @@ import {
     getUser,
 } from "./helpers.js";
 
-import { displayPost } from "./posts.js";
+import { displayPost, newPost } from "./posts.js";
 import { displayProfile } from "./profile.js";
 
 // This url may need to change depending on what port your backend is running
@@ -208,6 +208,10 @@ function yesToken() {
             const user = await getUser(tok);
             displayProfile(user);
         });
+
+    document.getElementById("navUpload").addEventListener("click", (e) => {
+        newPost();
+    });
 }
 
 // checking that user has logged in

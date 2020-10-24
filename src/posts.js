@@ -7,6 +7,7 @@ import {
     closeModal,
     getUserUsername,
     checkElem,
+    fileToDataUrl,
 } from "./helpers.js";
 
 import { displayProfile } from "./profile.js";
@@ -173,6 +174,14 @@ async function likeModal(likeArray) {
             let currUser = await getUser(tok, likeArray[i]);
             let name = document.createElement("p");
             name.innerText = currUser.username;
+            name.className = "author";
+            name.addEventListener("click", (e) => {
+                likeModal.style.display = "none";
+                displayProfile(currUser);
+                while (likeModalContent.firstChild) {
+                    likeModalContent.removeChild(likeModalContent.lastChild);
+                }
+            });
             likeModalContent.appendChild(name);
         }
     }
@@ -217,36 +226,54 @@ function commentBox(data, commentArray, commentCount) {
 
 function commentFeed(commentArray) {
     const comments = document.getElementById("comments");
-    const header = document.createElement("h2");
-    header.innerText = "Comments";
-    comments.appendChild(header);
     document.getElementById("commentFeedModal").style.display = "block";
-    for (let i = 0; i < commentArray.length; i++) {
-        const mainComment = document.createElement("div");
-        const author = document.createElement("p");
-        author.innerText = commentArray[i].author;
-        author.className = "author";
-        mainComment.appendChild(author);
-        const comment = document.createElement("p");
-        comment.innerText = commentArray[i].comment;
-        mainComment.appendChild(comment);
-        const time = new Date(parseInt(commentArray[i].published) * 1000);
-        const timestamp = document.createElement("p");
-        timestamp.innerText =
-            "commented on " +
-            time.getDate() +
-            "/" +
-            time.getMonth() +
-            "/" +
-            time.getFullYear() +
-            " " +
-            time.getHours() +
-            ":" +
-            time.getMinutes();
-        timestamp.className = "postTime";
-        const test = new Date();
-        mainComment.appendChild(timestamp);
-        comments.appendChild(mainComment);
+    if (commentArray.length === 0) {
+        const noComments = document.createElement("p");
+        noComments.innerText =
+            "There are currently no comments! Be the first one!";
+        comments.appendChild(noComments);
+    } else {
+        const header = document.createElement("h2");
+        header.innerText = "Comments";
+        comments.appendChild(header);
+
+        for (let i = 0; i < commentArray.length; i++) {
+            const mainComment = document.createElement("div");
+            const author = document.createElement("p");
+            author.innerText = commentArray[i].author;
+            author.className = "author";
+            author.addEventListener("click", async (e) => {
+                const token = getToken();
+                const user = await getUserUsername(
+                    token,
+                    commentArray[i].author
+                );
+                displayProfile(user);
+                document.getElementById("commentFeedModal").style.display =
+                    "none";
+            });
+            mainComment.appendChild(author);
+            const comment = document.createElement("p");
+            comment.innerText = commentArray[i].comment;
+            mainComment.appendChild(comment);
+            const time = new Date(parseInt(commentArray[i].published) * 1000);
+            const timestamp = document.createElement("p");
+            timestamp.innerText =
+                "commented on " +
+                time.getDate() +
+                "/" +
+                time.getMonth() +
+                "/" +
+                time.getFullYear() +
+                " " +
+                time.getHours() +
+                ":" +
+                time.getMinutes();
+            timestamp.className = "postTime";
+            const test = new Date();
+            mainComment.appendChild(timestamp);
+            comments.appendChild(mainComment);
+        }
     }
     closeModal();
 }
@@ -263,4 +290,74 @@ async function pushComment(com) {
     };
     console.log("pushComment", text);
     return text;
+}
+
+export function newPost() {
+    // clear the feed
+    const mainFeed = document.getElementById("mainFeed");
+    while (mainFeed.firstChild) {
+        mainFeed.removeChild(mainFeed.lastChild);
+    }
+    document.getElementById("notFollowingAnyone").style.display = "none";
+    const container = document.createElement("div");
+    container.className = "uploadContainer";
+    mainFeed.appendChild(container);
+    const title = document.createElement("h1");
+    title.innerText = "New Post";
+    container.appendChild(title);
+    const upload = document.createElement("h3");
+    upload.innerText = "Upload your photo here:";
+    container.appendChild(upload);
+    const form = document.createElement("form");
+    const input = document.createElement("input");
+    input.type = "file";
+    form.appendChild(input);
+    container.appendChild(form);
+
+    let file;
+    input.addEventListener("change", (e) => {
+        const xd = fileToDataUrl(e.target.files[0]);
+        xd.then((data) => {
+            file = data;
+        }).catch((err) => {
+            raiseError(err);
+        });
+    });
+
+    const desc = document.createElement("h3");
+    desc.innerText = "description:";
+    container.appendChild(desc);
+    const textbox = document.createElement("textarea");
+    textbox.rows = "3";
+    textbox.cols = "40";
+    container.appendChild(textbox);
+
+    const submit = document.createElement("button");
+    submit.innerText = "post!";
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createElement("br"));
+    container.appendChild(submit);
+
+    submit.addEventListener("click", (e) => {
+        const photo = file.slice(23);
+        const token = getToken();
+        api.post("post", {
+            headers: {
+                Authorization: token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                description_text: textbox.value,
+                src: photo,
+            }),
+        })
+            .then(async (data) => {
+                console.log(data);
+                const user = await getUser(token);
+                displayProfile(user);
+            })
+            .catch((err) => {
+                raiseError(err);
+            });
+    });
 }

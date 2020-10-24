@@ -12,6 +12,7 @@ import { displayPost } from "./posts.js";
 const api = new API("http://localhost:5000");
 
 export async function displayProfile(user) {
+    document.getElementById("notFollowingAnyone").style.display = "none";
     const mainFeed = document.getElementById("mainFeed");
     while (mainFeed.firstChild) {
         mainFeed.removeChild(mainFeed.lastChild);
@@ -44,8 +45,8 @@ export async function displayProfile(user) {
 
     // follow/unfollow button
     const follow = document.createElement("button");
-    if (checkElem(requestingUser["following"], user.id) === true) {
-        console.log(11111111);
+    if (checkElem(requestingUser["following"], user.id)) {
+        console.log(user);
         follow.innerText = "unfollow " + user.username;
     } else {
         follow.innerText = "follow " + user.username;
@@ -60,19 +61,35 @@ export async function displayProfile(user) {
             const errorModal = document.getElementById("errorModal");
             errorModal.style.display = "block";
         } else {
-            const path = "user/follow?username=" + user.username;
-            api.put(path, {
-                headers: {
-                    Authorization: token,
-                },
-            })
-                .then((data) => {
-                    console.log(data);
-                    follow.innerText = "unfollow " + user.username;
+            // if the requesting user is following, do unfollow else do follow
+            if (checkElem(requestingUser["following"], user.id)) {
+                const path = "user/unfollow?username=" + user.username;
+                api.put(path, {
+                    headers: {
+                        Authorization: token,
+                    },
                 })
-                .catch((err) => {
-                    raiseError(err);
-                });
+                    .then((data) => {
+                        follow.innerText = "follow " + user.username;
+                    })
+                    .catch((err) => {
+                        raiseError(err);
+                    });
+            } else {
+                const path = "user/follow?username=" + user.username;
+                api.put(path, {
+                    headers: {
+                        Authorization: token,
+                    },
+                })
+                    .then((data) => {
+                        console.log(data);
+                        follow.innerText = "unfollow " + user.username;
+                    })
+                    .catch((err) => {
+                        raiseError(err);
+                    });
+            }
         }
     });
 
@@ -99,6 +116,17 @@ export async function displayProfile(user) {
         }
     });
 
+    if (requestingUser.username === user.username) {
+        const update = document.createElement("button");
+        update.innerText = "settings";
+        profileBox.appendChild(document.createElement("br"));
+        profileBox.appendChild(document.createElement("br"));
+        profileBox.appendChild(update);
+        update.addEventListener("click", (e) => {
+            displayUpdate();
+        });
+    }
+
     mainFeed.appendChild(profileBox);
 
     displayUserPost(user["posts"]);
@@ -121,5 +149,12 @@ function displayUserPost(postArray) {
             .catch((err) => {
                 raiseError(err);
             });
+    }
+}
+
+function displayUpdate() {
+    const mainFeed = document.getElementById("mainFeed");
+    while (mainFeed.firstChild) {
+        mainFeed.removeChild(mainFeed.lastChild);
     }
 }

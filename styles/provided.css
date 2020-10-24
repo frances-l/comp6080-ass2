@@ -47,6 +47,10 @@ footer > * {
     list-style-type: none;
 }
 
+.nav-item:hover {
+    cursor: pointer;
+}
+
 /* Modal CSS https://www.w3schools.com/howto/howto_css_modals.asp */
 
 .modal {
@@ -184,10 +188,32 @@ footer > * {
     align-items: center;
     text-align: center;
     margin-top: 5%;
+    padding-bottom: 2%;
 }
 
 #home:hover,
 #home:focus {
     cursor: pointer;
     text-decoration: underline;
+}
+
+.uploadContainer {
+    align-self: center;
+    text-align: center;
+    background-color: #fff;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+#notFollowingAnyone {
+    text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+    #home {
+        font-size: 18px;
+    }
+    .nav-item {
+        font-size: 12px;
+    }
 }
