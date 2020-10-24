@@ -31,14 +31,14 @@ export async function displayProfile(user) {
     profileBox.appendChild(name);
 
     const followed = document.createElement("h3");
-    followed.innerText = "followers: " + user.followed_num;
+    followed.innerText = "Followers: " + user.followed_num;
     profileBox.appendChild(followed);
 
     const following = document.createElement("h3");
     const followingNum = document.createElement("span");
     followingNum.innerText = user.following.length;
     followingNum.className = "count";
-    following.innerText = "following: ";
+    following.innerText = "Following: ";
     following.appendChild(followingNum);
     profileBox.appendChild(following);
 
@@ -48,9 +48,9 @@ export async function displayProfile(user) {
     const follow = document.createElement("button");
     if (checkElem(requestingUser["following"], user.id)) {
         console.log(user);
-        follow.innerText = "unfollow " + user.username;
+        follow.innerText = "Unfollow " + user.username;
     } else {
-        follow.innerText = "follow " + user.username;
+        follow.innerText = "Follow " + user.username;
     }
 
     profileBox.appendChild(follow);
@@ -58,8 +58,9 @@ export async function displayProfile(user) {
     followHandler(follow, followingNum, user, requestingUser);
 
     if (requestingUser.username === user.username) {
+        follow.style.display = "none";
         const update = document.createElement("button");
-        update.innerText = "settings";
+        update.innerText = "Settings";
         profileBox.appendChild(document.createElement("br"));
         profileBox.appendChild(document.createElement("br"));
         profileBox.appendChild(update);
@@ -77,7 +78,9 @@ export async function displayProfile(user) {
 
 function displayUserPost(postArray) {
     const token = getToken();
-    for (let i = 0; i < postArray.length; i++) {
+    console.log(6666, postArray);
+    for (let i = postArray.length - 1; i >= 0; i--) {
+        console.log(postArray[i]);
         const path = "post?id=" + postArray[i];
         api.get(path, {
             headers: {
@@ -85,6 +88,7 @@ function displayUserPost(postArray) {
             },
         })
             .then((data) => {
+                console.log(33333, data);
                 displayPost(data);
             })
             .catch((err) => {
@@ -109,19 +113,19 @@ async function displayUpdate() {
     container.appendChild(settings);
 
     const username = document.createElement("h3");
-    username.innerText = "username: " + user.username;
+    username.innerText = "Username: " + user.username;
     container.appendChild(username);
 
     const name = document.createElement("h3");
-    name.innerText = "name: " + user.name;
+    name.innerText = "Name: " + user.name;
     container.appendChild(name);
 
     const email = document.createElement("h3");
-    email.innerText = "email: " + user.email;
+    email.innerText = "Email: " + user.email;
     container.appendChild(email);
 
     const buttonContainer = document.createElement("div");
-    buttonContainer.id = "updateButtonContainer";
+    buttonContainer.className = "updateButtonContainer";
     container.appendChild(buttonContainer);
 
     const updateName = document.createElement("button");
@@ -140,47 +144,50 @@ async function displayUpdate() {
         updateNameCall();
     });
 
+    updateEmail.addEventListener("click", (e) => {
+        updateEmailCall();
+    });
+
+    updatePassword.addEventListener("click", (e) => {
+        updatePasswordCall();
+    });
+
     mainFeed.appendChild(container);
 }
 
 function followHandler(follow, followingNum, user, requestingUser) {
     const token = getToken();
     follow.addEventListener("click", async (e) => {
-        if (requestingUser.username === user.username) {
-            const message = document.getElementById("errorMessage");
-            message.innerText = "You cannot follow yourself!";
-            const errorModal = document.getElementById("errorModal");
-            errorModal.style.display = "block";
+        // if the requesting user is following, do unfollow else do follow
+        if (checkElem(requestingUser["following"], user.id)) {
+            const path = "user/unfollow?username=" + user.username;
+            api.put(path, {
+                headers: {
+                    Authorization: token,
+                },
+            })
+                .then((data) => {
+                    follow.innerText = "follow " + user.username;
+                    displayProfile(user);
+                })
+                .catch((err) => {
+                    raiseError(err);
+                });
         } else {
-            // if the requesting user is following, do unfollow else do follow
-            if (checkElem(requestingUser["following"], user.id)) {
-                const path = "user/unfollow?username=" + user.username;
-                api.put(path, {
-                    headers: {
-                        Authorization: token,
-                    },
+            const path = "user/follow?username=" + user.username;
+            api.put(path, {
+                headers: {
+                    Authorization: token,
+                },
+            })
+                .then((data) => {
+                    console.log(data);
+                    follow.innerText = "unfollow " + user.username;
+                    displayProfile(user);
                 })
-                    .then((data) => {
-                        follow.innerText = "follow " + user.username;
-                    })
-                    .catch((err) => {
-                        raiseError(err);
-                    });
-            } else {
-                const path = "user/follow?username=" + user.username;
-                api.put(path, {
-                    headers: {
-                        Authorization: token,
-                    },
-                })
-                    .then((data) => {
-                        console.log(data);
-                        follow.innerText = "unfollow " + user.username;
-                    })
-                    .catch((err) => {
-                        raiseError(err);
-                    });
-            }
+                .catch((err) => {
+                    raiseError(err);
+                });
         }
     });
 
@@ -251,6 +258,138 @@ function updateNameCall() {
 
     const passwordText = document.createElement("label");
     passwordText.innerText = "Confirm your password: ";
+    form.appendChild(passwordText);
+    const passwordContent = document.createElement("input");
+    passwordContent.type = "password";
+    form.appendChild(passwordContent);
+
+    form.appendChild(document.createElement("br"));
+    form.appendChild(document.createElement("br"));
+
+    const submit = document.createElement("input");
+    submit.type = "submit";
+    form.appendChild(submit);
+
+    submit.addEventListener("click", (e) => {
+        api.put("user", {
+            headers: {
+                Authorization: token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: emailContent.value,
+                name: nameContent.value,
+                password: passwordContent.value,
+            }),
+        })
+            .then((data) => console.log(data))
+            .catch((err) => {
+                raiseError(err);
+            });
+    });
+}
+
+function updateEmailCall() {
+    const token = getToken();
+    document.getElementById("updateModal").style.display = "block";
+    const container = document.getElementById("updateContent");
+
+    while (container.firstChild) {
+        container.removeChild(container.lastChild);
+    }
+
+    const header = document.createElement("h1");
+    header.innerText = "Update your email:";
+    container.appendChild(header);
+    const form = document.createElement("form");
+    container.appendChild(form);
+
+    const nameText = document.createElement("label");
+    nameText.innerText = "Confirm your name: ";
+    form.appendChild(nameText);
+    const nameContent = document.createElement("input");
+    nameContent.type = "text";
+    form.appendChild(nameContent);
+
+    form.appendChild(document.createElement("br"));
+
+    const emailText = document.createElement("label");
+    emailText.innerText = "New email: ";
+    form.appendChild(emailText);
+    const emailContent = document.createElement("input");
+    emailContent.type = "text";
+    form.appendChild(emailContent);
+
+    form.appendChild(document.createElement("br"));
+
+    const passwordText = document.createElement("label");
+    passwordText.innerText = "Confirm your password: ";
+    form.appendChild(passwordText);
+    const passwordContent = document.createElement("input");
+    passwordContent.type = "password";
+    form.appendChild(passwordContent);
+
+    form.appendChild(document.createElement("br"));
+    form.appendChild(document.createElement("br"));
+
+    const submit = document.createElement("input");
+    submit.type = "submit";
+    form.appendChild(submit);
+
+    submit.addEventListener("click", (e) => {
+        api.put("user", {
+            headers: {
+                Authorization: token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: emailContent.value,
+                name: nameContent.value,
+                password: passwordContent.value,
+            }),
+        })
+            .then((data) => console.log(data))
+            .catch((err) => {
+                raiseError(err);
+            });
+    });
+}
+
+function updatePasswordCall() {
+    const token = getToken();
+    document.getElementById("updateModal").style.display = "block";
+    const container = document.getElementById("updateContent");
+
+    while (container.firstChild) {
+        container.removeChild(container.lastChild);
+    }
+
+    const header = document.createElement("h1");
+    header.innerText = "Update your password:";
+    container.appendChild(header);
+    const form = document.createElement("form");
+    container.appendChild(form);
+
+    const nameText = document.createElement("label");
+    nameText.innerText = "Confirm your name: ";
+    form.appendChild(nameText);
+    const nameContent = document.createElement("input");
+    nameContent.type = "text";
+    form.appendChild(nameContent);
+
+    form.appendChild(document.createElement("br"));
+
+    const emailText = document.createElement("label");
+    emailText.innerText = "Confirm your email: ";
+    form.appendChild(emailText);
+    const emailContent = document.createElement("input");
+    emailContent.type = "text";
+    form.appendChild(emailContent);
+
+    form.appendChild(document.createElement("br"));
+
+    const passwordText = document.createElement("label");
+    passwordText.innerText = "New password: ";
     form.appendChild(passwordText);
     const passwordContent = document.createElement("input");
     passwordContent.type = "password";

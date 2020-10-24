@@ -203,6 +203,7 @@ footer > * {
     background-color: #fff;
     padding-left: 5%;
     padding-right: 5%;
+    margin-top: 5%;
 }
 
 #notFollowingAnyone {
@@ -218,8 +219,12 @@ footer > * {
     }
 }
 
-#updateButtonContainer {
+.updateButtonContainer {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+}
+
+#notLoggedIn {
+    text-align: center;
 }

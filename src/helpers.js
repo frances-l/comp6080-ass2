@@ -154,6 +154,7 @@ export function closeModal() {
     const commentFeedClose = document.getElementsByClassName("close")[4];
     const commentClose = document.getElementsByClassName("close")[5];
     const followingClose = document.getElementsByClassName("close")[6];
+    const updateClose = document.getElementsByClassName("close")[7];
 
     loginClose.addEventListener("click", (e) => {
         loginModal.style.display = "none";
@@ -195,6 +196,10 @@ export function closeModal() {
         }
     });
 
+    updateClose.addEventListener("click", (e) => {
+        updateClose.style.display = "none";
+    });
+
     window.addEventListener("keydown", (e) => {
         if (e.code === "Escape") {
             followingModal.style.display = "none";
@@ -216,6 +221,8 @@ export function closeModal() {
             registerModal.style.display = "none";
 
             loginModal.style.display = "none";
+
+            updateModal.style.display = "none";
         }
     });
 }

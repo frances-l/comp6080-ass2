@@ -14,18 +14,18 @@ import { displayProfile } from "./profile.js";
 
 const api = new API("http://localhost:5000");
 
-export function displayPost(data) {
+export async function displayPost(data) {
     const token = getToken();
     const feed = document.getElementById("mainFeed");
 
     const box = document.createElement("div");
     box.className = "post";
     // setting author
+    const user = await getUserUsername(token, data["meta"].author);
     const author = document.createElement("p");
     author.innerText = data["meta"].author;
     author.className = "postText author";
     author.addEventListener("click", async (e) => {
-        const user = await getUserUsername(token, data["meta"].author);
         displayProfile(user);
     });
     box.appendChild(author);
@@ -74,7 +74,7 @@ export function displayPost(data) {
     // getting update time
     let postTime = data["meta"].published;
     postTime = new Date(parseInt(postTime) * 1000);
-    const timeString =
+    let timeString =
         "posted on " +
         postTime.getDate() +
         "/" +
@@ -83,12 +83,40 @@ export function displayPost(data) {
         postTime.getFullYear() +
         " " +
         postTime.getHours() +
-        ":" +
-        postTime.getMinutes();
+        ":";
+    if (String(postTime.getMinutes()).length === 1) {
+        timeString = timeString + "0" + postTime.getMinutes();
+    } else {
+        timeString = timeString + postTime.getMinutes();
+    }
+    postTime.getMinutes();
     const time = document.createElement("p");
     time.innerText = timeString;
     time.className = "postTime postText";
     box.appendChild(time);
+
+    const tokenUser = await getUser(token);
+
+    if (tokenUser.username === user.username) {
+        const buttonContainer = document.createElement("div");
+        buttonContainer.className = "updateButtonContainer";
+        const edit = document.createElement("button");
+        edit.innerText = "Edit your post";
+        const del = document.createElement("button");
+        del.innerText = "Delete your post";
+        buttonContainer.appendChild(edit);
+        buttonContainer.appendChild(del);
+        box.appendChild(buttonContainer);
+        box.style.paddingBottom = "2%";
+
+        edit.addEventListener("click", (e) => {
+            editPost(data);
+        });
+
+        del.addEventListener("click", (e) => {
+            deletePost(data);
+        });
+    }
 
     feed.appendChild(box);
 }
@@ -105,7 +133,6 @@ export async function likesAndCommentsEvents(
     const user = await getUser(tok);
     let likeArray = data["meta"].likes;
     let commentArray = data.comments;
-    console.log(61161616, data.id);
     likeButton.addEventListener("click", (e) => {
         if (checkElem(likeArray, user.id) === false) {
             // liking photo
@@ -217,12 +244,9 @@ function commentBox(data, commentArray, commentCount, id) {
                     console.log(1111111);
                     if (count == 0) {
                         const text = await pushComment(com);
-                        console.log("wwwwww", text);
-                        console.log("aaaaaa", commentArray);
                         commentArray.push(text);
                         commentCount.innerText =
                             parseInt(commentCount.innerText) + 1;
-                        console.log("pppppp", commentArray);
                         count = count + 1;
                     }
                 }
@@ -232,7 +256,6 @@ function commentBox(data, commentArray, commentCount, id) {
             });
     });
     closeModal();
-    console.log("xxxxxx", commentArray);
     return commentArray;
 }
 
@@ -282,8 +305,13 @@ function commentFeed(commentArray) {
                 time.getFullYear() +
                 " " +
                 time.getHours() +
-                ":" +
-                time.getMinutes();
+                ":";
+            if (String(time.getMinutes()).length === 1) {
+                timestamp.innerText =
+                    timestamp.innerText + "0" + time.getMinutes();
+            } else {
+                timestamp.innerText = timestamp.innerText + time.getMinutes();
+            }
             timestamp.className = "postTime";
             mainComment.appendChild(timestamp);
             comments.appendChild(mainComment);
@@ -339,7 +367,7 @@ export function newPost() {
     });
 
     const desc = document.createElement("h3");
-    desc.innerText = "description:";
+    desc.innerText = "Description:";
     container.appendChild(desc);
     const textbox = document.createElement("textarea");
     textbox.rows = "3";
@@ -347,7 +375,7 @@ export function newPost() {
     container.appendChild(textbox);
 
     const submit = document.createElement("button");
-    submit.innerText = "post!";
+    submit.innerText = "Post!";
     container.appendChild(document.createElement("br"));
     container.appendChild(document.createElement("br"));
     container.appendChild(submit);
@@ -367,6 +395,106 @@ export function newPost() {
         })
             .then(async (data) => {
                 console.log(data);
+                const user = await getUser(token);
+                displayProfile(user);
+            })
+            .catch((err) => {
+                raiseError(err);
+            });
+    });
+}
+
+function editPost(data) {
+    console.log(data);
+    const token = getToken();
+    const path = "post?id=" + data.id;
+    document.getElementById("updateModal").style.display = "block";
+    const container = document.getElementById("updateContent");
+    while (container.firstChild) {
+        container.removeChild(container.lastChild);
+    }
+
+    const header = document.createElement("h1");
+    header.innerText = "Update your description: ";
+    container.appendChild(header);
+
+    const textbox = document.createElement("textarea");
+    textbox.rows = "3";
+    textbox.cols = "40";
+
+    container.appendChild(textbox);
+
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createElement("br"));
+
+    const submit = document.createElement("button");
+    submit.innerText = "Update description";
+
+    container.appendChild(submit);
+
+    submit.addEventListener("click", (e) => {
+        console.log(textbox.value);
+        api.put(path, {
+            headers: {
+                Authorization: token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                description_text: textbox.value,
+                src: data.src,
+            }),
+        })
+            .then(async (data) => {
+                console.log(data);
+                document.getElementById("updateModal").style.display = "none";
+                const user = await getUser(token);
+                displayProfile(user);
+            })
+            .catch((err) => {
+                raiseError(err);
+            });
+    });
+}
+
+function deletePost(data) {
+    const path = "post?id=" + data.id;
+    document.getElementById("updateModal").style.display = "block";
+    const container = document.getElementById("updateContent");
+    while (container.firstChild) {
+        container.removeChild(container.lastChild);
+    }
+    const header = document.createElement("h2");
+    header.innerText = "Are you sure you want to delete your post?";
+    header.style.textAlign = "center";
+    container.appendChild(header);
+
+    const buttonContainer = document.createElement("div");
+    buttonContainer.className = "updateButtonContainer";
+    container.appendChild(buttonContainer);
+
+    const yes = document.createElement("button");
+    yes.innerText = "Yes";
+    buttonContainer.appendChild(yes);
+
+    const no = document.createElement("button");
+    no.innerText = "No";
+    buttonContainer.appendChild(no);
+
+    no.addEventListener("click", (e) => {
+        document.getElementById("updateModal").style.display = "none";
+    });
+
+    yes.addEventListener("click", (e) => {
+        const token = getToken();
+        const path = "post?id=" + data.id;
+        api.delete(path, {
+            headers: {
+                Authorization: token,
+            },
+        })
+            .then(async (data) => {
+                console.log(data);
+                document.getElementById("updateModal").style.display = "none";
                 const user = await getUser(token);
                 displayProfile(user);
             })
