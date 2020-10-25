@@ -39,7 +39,7 @@ footer > * {
     padding: 0;
 }
 
-.nav-item {
+.navItem {
     border: 1px solid rgba(0, 0, 0, 0.1);
     margin: auto;
     padding: 5px;
@@ -48,7 +48,7 @@ footer > * {
     border-radius: 5px;
 }
 
-.nav-item:hover {
+.navItem:hover {
     cursor: pointer;
 }
 
@@ -69,7 +69,7 @@ footer > * {
 }
 
 /* Modal Content */
-.modal-content {
+.modalContent {
     background-color: #fefefe;
     margin: auto;
     max-height: 70%;
@@ -211,7 +211,7 @@ footer > * {
     #home {
         font-size: 18px;
     }
-    .nav-item {
+    .navItem {
         font-size: 12px;
     }
     .post {
