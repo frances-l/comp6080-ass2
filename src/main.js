@@ -166,29 +166,7 @@ function yesToken() {
     // Return back to feed if "Quickpic" is clicked on
     const home = document.getElementById("home");
     home.addEventListener("click", (e) => {
-        api.get("user/feed", {
-            headers: {
-                Authorization: tok,
-            },
-        })
-            .then((data) => {
-                let feed = document.getElementById("mainFeed");
-                while (feed.firstChild) {
-                    feed.removeChild(feed.lastChild);
-                }
-                if (data["posts"].length === 0) {
-                    document.getElementById(
-                        "notFollowingAnyone"
-                    ).style.display = "block";
-                } else {
-                    for (let i = 0; i < data["posts"].length; i++) {
-                        displayPost(data["posts"][i]);
-                    }
-                }
-            })
-            .catch((err) => {
-                raiseError(err);
-            });
+        reload();
     });
 
     // Infinite scroll
