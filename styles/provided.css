@@ -45,6 +45,7 @@ footer > * {
     padding: 5px;
     display: inline;
     list-style-type: none;
+    border-radius: 5px;
 }
 
 .nav-item:hover {

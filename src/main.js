@@ -114,7 +114,6 @@ function yesToken() {
     document.getElementById("navLogged").style.display = "block";
     document.getElementById("loggedIn").style.display = "block";
     const tok = getToken();
-    console.log(tok);
 
     const banner = document.getElementsByClassName("banner")[0];
     banner.style.position = "fixed";

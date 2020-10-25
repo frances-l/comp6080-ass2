@@ -29,8 +29,6 @@ const api = new API("http://localhost:5000");
 export async function displayPost(data) {
     const token = getToken();
     const feed = document.getElementById("mainFeed");
-
-    console.log(data);
     const box = document.createElement("div");
     box.className = "post";
     // Setting author
@@ -202,9 +200,7 @@ async function likesAndCommentsEvents(
 
     // Create a comment
     commentButton.addEventListener("click", (e) => {
-        console.log(data.comments);
         commentArray = commentBox(data, commentArray, commentCount, data.id);
-        console.log(commentArray);
     });
 
     // Show the comments

@@ -56,7 +56,6 @@ export async function displayProfile(user) {
     // Follow/unfollow button
     const follow = document.createElement("button");
     if (checkElem(requestingUser["following"], user.id)) {
-        console.log(user);
         follow.innerText = "Unfollow " + user.username;
     } else {
         follow.innerText = "Follow " + user.username;
@@ -93,7 +92,6 @@ export async function displayProfile(user) {
 function displayUserPost(postArray) {
     const token = getToken();
     for (let i = postArray.length - 1; i >= 0; i--) {
-        console.log(postArray[i]);
         const path = "post?id=" + postArray[i];
         api.get(path, {
             headers: {
@@ -120,7 +118,6 @@ async function displayUpdate() {
     }
     const token = getToken();
     const user = await getUser(token);
-    console.log(user);
 
     const container = document.createElement("div");
     container.className = "profileBox";
@@ -205,7 +202,6 @@ function followHandler(follow, followingNum, user, requestingUser) {
                 },
             })
                 .then((data) => {
-                    console.log(data);
                     follow.innerText = "unfollow " + user.username;
                     displayProfile(user);
                 })

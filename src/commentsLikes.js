@@ -78,9 +78,7 @@ export function commentBox(data, commentArray, commentCount, id) {
                     modal.style.display = "none";
                     if (count == 0) {
                         const text = await pushComment(com);
-                        console.log(commentArray);
                         commentArray.push(text);
-                        console.log(commentArray);
                         commentCount.innerText =
                             parseInt(commentCount.innerText) + 1;
                         count = count + 1;

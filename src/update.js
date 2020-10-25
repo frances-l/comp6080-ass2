@@ -1,5 +1,6 @@
 import API from "./api.js";
-import { getToken, raiseError } from "./helpers.js";
+import { getToken, getUser, raiseError } from "./helpers.js";
+import { displayProfile } from "./profile.js";
 
 const api = new API("http://localhost:5000");
 
@@ -57,6 +58,7 @@ export function updateNameCall() {
 
     // PUT request
     submit.addEventListener("click", (e) => {
+        e.preventDefault();
         api.put("user", {
             headers: {
                 Authorization: token,
@@ -68,7 +70,11 @@ export function updateNameCall() {
                 password: passwordContent.value,
             }),
         })
-            .then((data) => console.log(data))
+            .then(async (data) => {
+                const user = await getUser(token);
+                displayProfile(user);
+                document.getElementById("updateModal").style.display = "none";
+            })
             .catch((err) => {
                 raiseError(err);
             });
@@ -129,6 +135,7 @@ export function updateEmailCall() {
 
     // PUT request
     submit.addEventListener("click", (e) => {
+        e.preventDefault();
         api.put("user", {
             headers: {
                 Authorization: token,
@@ -140,7 +147,11 @@ export function updateEmailCall() {
                 password: passwordContent.value,
             }),
         })
-            .then((data) => console.log(data))
+            .then(async (data) => {
+                const user = await getUser(token);
+                displayProfile(user);
+                document.getElementById("updateModal").style.display = "none";
+            })
             .catch((err) => {
                 raiseError(err);
             });
@@ -201,6 +212,7 @@ export function updatePasswordCall() {
 
     // PUT request
     submit.addEventListener("click", (e) => {
+        e.preventDefault();
         api.put("user", {
             headers: {
                 Authorization: token,
@@ -212,7 +224,11 @@ export function updatePasswordCall() {
                 password: passwordContent.value,
             }),
         })
-            .then((data) => console.log(data))
+            .then(async (data) => {
+                const user = getUser(token);
+                displayProfile(user);
+                document.getElementById("updateModal").style.display = "none";
+            })
             .catch((err) => {
                 raiseError(err);
             });
