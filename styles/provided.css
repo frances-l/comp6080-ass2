@@ -132,6 +132,7 @@ footer > * {
     height: auto;
     align-self: center;
     margin-top: 5%;
+    box-shadow: 5px 5px 5px rgb(179, 179, 179);
 }
 
 .postImage {
@@ -190,21 +191,16 @@ footer > * {
     text-align: center;
     margin-top: 5%;
     padding-bottom: 2%;
+    border-radius: 10px;
+    border-color: #888;
+    border-style: solid;
+    border-width: 1px;
 }
 
 #home:hover,
 #home:focus {
     cursor: pointer;
     text-decoration: underline;
-}
-
-.uploadContainer {
-    align-self: center;
-    text-align: center;
-    background-color: #fff;
-    padding-left: 5%;
-    padding-right: 5%;
-    margin-top: 5%;
 }
 
 #notFollowingAnyone {

@@ -222,7 +222,7 @@ export function newPost() {
     // Setting up page
     document.getElementById("notFollowingAnyone").style.display = "none";
     const container = document.createElement("div");
-    container.className = "uploadContainer";
+    container.className = "profileBox";
     mainFeed.appendChild(container);
     const title = document.createElement("h1");
     title.innerText = "New Post";
