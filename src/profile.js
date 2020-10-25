@@ -137,17 +137,17 @@ async function displayUpdate() {
     email.innerText = "Email: " + user.email;
     container.appendChild(email);
 
-    const buttonContainer = document.createElement("div");
-    buttonContainer.className = "updateButtonContainer";
-    container.appendChild(buttonContainer);
-
     const updateName = document.createElement("button");
     updateName.innerText = "Update name";
     container.appendChild(updateName);
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createElement("br"));
 
     const updateEmail = document.createElement("button");
     updateEmail.innerText = "Update email";
     container.appendChild(updateEmail);
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createElement("br"));
 
     const updatePassword = document.createElement("button");
     updatePassword.innerText = "Update password";
