@@ -51,7 +51,7 @@ footer > * {
     cursor: pointer;
 }
 
-/* Modal CSS https://www.w3schools.com/howto/howto_css_modals.asp */
+/* Modal Skeleton CSS https://www.w3schools.com/howto/howto_css_modals.asp */
 
 .modal {
     display: none;
@@ -127,7 +127,7 @@ footer > * {
 
 .post {
     background-color: #fff;
-    width: 23em;
+    width: 30em;
     height: auto;
     align-self: center;
     margin-top: 5%;
@@ -217,6 +217,9 @@ footer > * {
     .nav-item {
         font-size: 12px;
     }
+    .post {
+        width: 23em;
+    }
 }
 
 .updateButtonContainer {
@@ -227,4 +230,8 @@ footer > * {
 
 #notLoggedIn {
     text-align: center;
+}
+
+#mainFeed {
+    padding-top: 80px;
 }

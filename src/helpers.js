@@ -55,6 +55,11 @@ export function getToken() {
     return "Token " + localStorage.getItem("token");
 }
 
+/**
+ * Gets the user that is logged in, or the user of the supplied id
+ * @param {String} token
+ * @param {Int} id
+ */
 export function getUser(token, id = -1) {
     if (id === -1) {
         return api
@@ -87,6 +92,12 @@ export function getUser(token, id = -1) {
     }
 }
 
+/**
+ * Similar to getUser, but it gets the user with the provided username,
+ * but the token of the currently logged in user must be supplied.
+ * @param {String} token
+ * @param {String} username
+ */
 export function getUserUsername(token, username) {
     const path = "user?username=" + username;
     return api
@@ -103,19 +114,20 @@ export function getUserUsername(token, username) {
         });
 }
 
+/**
+ * Manages closing of modals
+ */
 export function closeModal() {
-    const likeModalContent = document.getElementById("likers");
     const loginModal = document.getElementById("loginModal");
     const registerModal = document.getElementById("registerModal");
     const errorModal = document.getElementById("errorModal");
     const likeModal = document.getElementById("likeModal");
     const commentFeedModal = document.getElementById("commentFeedModal");
     const commentModal = document.getElementById("commentModal");
-    const commentModalContent = document.getElementById("comments");
     const followingModal = document.getElementById("followingModal");
-    const followingContent = document.getElementById("following");
     const updateModal = document.getElementById("updateModal");
 
+    // If the user clicks outside of the modal
     window.addEventListener("click", (e) => {
         switch (e.target) {
             case loginModal:
@@ -129,9 +141,6 @@ export function closeModal() {
                 break;
             case likeModal:
                 likeModal.style.display = "none";
-                while (likeModalContent.firstChild) {
-                    likeModalContent.removeChild(likeModalContent.lastChild);
-                }
                 break;
             case commentModal:
                 commentModal.style.display = "none";
@@ -147,6 +156,7 @@ export function closeModal() {
         }
     });
 
+    // If the user clicks on the close button
     const errorClose = document.getElementsByClassName("close")[0];
     const loginClose = document.getElementsByClassName("close")[1];
     const registerClose = document.getElementsByClassName("close")[2];
@@ -158,12 +168,10 @@ export function closeModal() {
 
     loginClose.addEventListener("click", (e) => {
         loginModal.style.display = "none";
-        console.log("does this work");
     });
 
     registerClose.addEventListener("click", (e) => {
         registerModal.style.display = "none";
-        console.log("does this work 2");
     });
 
     errorClose.addEventListener("click", (e) => {
@@ -171,11 +179,7 @@ export function closeModal() {
     });
 
     likeClose.addEventListener("click", (e) => {
-        console.log("hello");
         likeModal.style.display = "none";
-        while (likeModalContent.firstChild) {
-            likeModalContent.removeChild(likeModalContent.lastChild);
-        }
     });
 
     commentClose.addEventListener("click", (e) => {
@@ -184,37 +188,26 @@ export function closeModal() {
 
     commentFeedClose.addEventListener("click", (e) => {
         commentFeedModal.style.display = "none";
-        while (commentModalContent.firstChild) {
-            commentModalContent.removeChild(commentModalContent.lastChild);
-        }
     });
 
     followingClose.addEventListener("click", (e) => {
         followingModal.style.display = "none";
-        while (followingContent.firstChild) {
-            followingContent.removeChild(followingContent.lastChild);
-        }
     });
 
     updateClose.addEventListener("click", (e) => {
         updateClose.style.display = "none";
     });
 
+    // If the user hits the esc key
     window.addEventListener("keydown", (e) => {
         if (e.code === "Escape") {
             followingModal.style.display = "none";
 
             commentFeedModal.style.display = "none";
-            while (commentModalContent.firstChild) {
-                commentModalContent.removeChild(commentModalContent.lastChild);
-            }
 
             commentModal.style.display = "none";
 
             likeModal.style.display = "none";
-            while (likeModalContent.firstChild) {
-                likeModalContent.removeChild(likeModalContent.lastChild);
-            }
 
             errorModal.style.display = "none";
 
@@ -227,6 +220,11 @@ export function closeModal() {
     });
 }
 
+/**
+ * Checks if a specific element is in an array
+ * @param {Array} array
+ * @param {Object} element
+ */
 export function checkElem(array, element) {
     for (let i = 0; i < array.length; i++) {
         if (array[i] === element) {

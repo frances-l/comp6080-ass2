@@ -1,6 +1,5 @@
 import API from "./api.js";
 import {
-    getUserUsername,
     getToken,
     raiseError,
     closeModal,
@@ -8,9 +7,19 @@ import {
     checkElem,
 } from "./helpers.js";
 import { displayPost } from "./posts.js";
+import {
+    updateNameCall,
+    updatePasswordCall,
+    updateEmailCall,
+} from "./update.js";
 
 const api = new API("http://localhost:5000");
 
+/**
+ * Given a user, display their profile, with information about their name,
+ * username, followers and following
+ * @param {JSON} user
+ */
 export async function displayProfile(user) {
     document.getElementById("notFollowingAnyone").style.display = "none";
     const mainFeed = document.getElementById("mainFeed");
@@ -44,7 +53,7 @@ export async function displayProfile(user) {
 
     const requestingUser = await getUser(token);
 
-    // follow/unfollow button
+    // Follow/unfollow button
     const follow = document.createElement("button");
     if (checkElem(requestingUser["following"], user.id)) {
         console.log(user);
@@ -57,6 +66,7 @@ export async function displayProfile(user) {
 
     followHandler(follow, followingNum, user, requestingUser);
 
+    // Display ability to go to settings if the users are the same
     if (requestingUser.username === user.username) {
         follow.style.display = "none";
         const update = document.createElement("button");
@@ -76,9 +86,12 @@ export async function displayProfile(user) {
     closeModal();
 }
 
+/**
+ * Given an array of posts, display the posts
+ * @param {Array} postArray
+ */
 function displayUserPost(postArray) {
     const token = getToken();
-    console.log(6666, postArray);
     for (let i = postArray.length - 1; i >= 0; i--) {
         console.log(postArray[i]);
         const path = "post?id=" + postArray[i];
@@ -88,7 +101,6 @@ function displayUserPost(postArray) {
             },
         })
             .then((data) => {
-                console.log(33333, data);
                 displayPost(data);
             })
             .catch((err) => {
@@ -97,6 +109,10 @@ function displayUserPost(postArray) {
     }
 }
 
+/**
+ * Creates the Settings page, and calls the respective functions if a user
+ * wants to update their name, email or password
+ */
 async function displayUpdate() {
     const mainFeed = document.getElementById("mainFeed");
     while (mainFeed.firstChild) {
@@ -155,10 +171,18 @@ async function displayUpdate() {
     mainFeed.appendChild(container);
 }
 
+/**
+ * Manages the follow and unfollow of a user, and allows you to see what
+ * the user follows
+ * @param {Object} follow
+ * @param {Object} followingNum
+ * @param {JSON} user
+ * @param {JSON} requestingUser
+ */
 function followHandler(follow, followingNum, user, requestingUser) {
     const token = getToken();
     follow.addEventListener("click", async (e) => {
-        // if the requesting user is following, do unfollow else do follow
+        // Follow and unfollow user
         if (checkElem(requestingUser["following"], user.id)) {
             const path = "user/unfollow?username=" + user.username;
             api.put(path, {
@@ -191,8 +215,8 @@ function followHandler(follow, followingNum, user, requestingUser) {
         }
     });
 
+    // See who the user that you're on the profile of is following
     followingNum.addEventListener("click", async (e) => {
-        console.log(99999);
         const followingModal = document.getElementById("followingModal");
         followingModal.style.display = "block";
         const followingContent = document.getElementById("following");
@@ -220,203 +244,5 @@ function followHandler(follow, followingNum, user, requestingUser) {
                 followingContent.appendChild(currentUsername);
             }
         }
-    });
-}
-
-function updateNameCall() {
-    const token = getToken();
-    document.getElementById("updateModal").style.display = "block";
-    const container = document.getElementById("updateContent");
-
-    while (container.firstChild) {
-        container.removeChild(container.lastChild);
-    }
-
-    const header = document.createElement("h1");
-    header.innerText = "Update your name:";
-    container.appendChild(header);
-    const form = document.createElement("form");
-    container.appendChild(form);
-
-    const nameText = document.createElement("label");
-    nameText.innerText = "New name: ";
-    form.appendChild(nameText);
-    const nameContent = document.createElement("input");
-    nameContent.type = "text";
-    form.appendChild(nameContent);
-
-    form.appendChild(document.createElement("br"));
-
-    const emailText = document.createElement("label");
-    emailText.innerText = "Confirm your email: ";
-    form.appendChild(emailText);
-    const emailContent = document.createElement("input");
-    emailContent.type = "text";
-    form.appendChild(emailContent);
-
-    form.appendChild(document.createElement("br"));
-
-    const passwordText = document.createElement("label");
-    passwordText.innerText = "Confirm your password: ";
-    form.appendChild(passwordText);
-    const passwordContent = document.createElement("input");
-    passwordContent.type = "password";
-    form.appendChild(passwordContent);
-
-    form.appendChild(document.createElement("br"));
-    form.appendChild(document.createElement("br"));
-
-    const submit = document.createElement("input");
-    submit.type = "submit";
-    form.appendChild(submit);
-
-    submit.addEventListener("click", (e) => {
-        api.put("user", {
-            headers: {
-                Authorization: token,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: emailContent.value,
-                name: nameContent.value,
-                password: passwordContent.value,
-            }),
-        })
-            .then((data) => console.log(data))
-            .catch((err) => {
-                raiseError(err);
-            });
-    });
-}
-
-function updateEmailCall() {
-    const token = getToken();
-    document.getElementById("updateModal").style.display = "block";
-    const container = document.getElementById("updateContent");
-
-    while (container.firstChild) {
-        container.removeChild(container.lastChild);
-    }
-
-    const header = document.createElement("h1");
-    header.innerText = "Update your email:";
-    container.appendChild(header);
-    const form = document.createElement("form");
-    container.appendChild(form);
-
-    const nameText = document.createElement("label");
-    nameText.innerText = "Confirm your name: ";
-    form.appendChild(nameText);
-    const nameContent = document.createElement("input");
-    nameContent.type = "text";
-    form.appendChild(nameContent);
-
-    form.appendChild(document.createElement("br"));
-
-    const emailText = document.createElement("label");
-    emailText.innerText = "New email: ";
-    form.appendChild(emailText);
-    const emailContent = document.createElement("input");
-    emailContent.type = "text";
-    form.appendChild(emailContent);
-
-    form.appendChild(document.createElement("br"));
-
-    const passwordText = document.createElement("label");
-    passwordText.innerText = "Confirm your password: ";
-    form.appendChild(passwordText);
-    const passwordContent = document.createElement("input");
-    passwordContent.type = "password";
-    form.appendChild(passwordContent);
-
-    form.appendChild(document.createElement("br"));
-    form.appendChild(document.createElement("br"));
-
-    const submit = document.createElement("input");
-    submit.type = "submit";
-    form.appendChild(submit);
-
-    submit.addEventListener("click", (e) => {
-        api.put("user", {
-            headers: {
-                Authorization: token,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: emailContent.value,
-                name: nameContent.value,
-                password: passwordContent.value,
-            }),
-        })
-            .then((data) => console.log(data))
-            .catch((err) => {
-                raiseError(err);
-            });
-    });
-}
-
-function updatePasswordCall() {
-    const token = getToken();
-    document.getElementById("updateModal").style.display = "block";
-    const container = document.getElementById("updateContent");
-
-    while (container.firstChild) {
-        container.removeChild(container.lastChild);
-    }
-
-    const header = document.createElement("h1");
-    header.innerText = "Update your password:";
-    container.appendChild(header);
-    const form = document.createElement("form");
-    container.appendChild(form);
-
-    const nameText = document.createElement("label");
-    nameText.innerText = "Confirm your name: ";
-    form.appendChild(nameText);
-    const nameContent = document.createElement("input");
-    nameContent.type = "text";
-    form.appendChild(nameContent);
-
-    form.appendChild(document.createElement("br"));
-
-    const emailText = document.createElement("label");
-    emailText.innerText = "Confirm your email: ";
-    form.appendChild(emailText);
-    const emailContent = document.createElement("input");
-    emailContent.type = "text";
-    form.appendChild(emailContent);
-
-    form.appendChild(document.createElement("br"));
-
-    const passwordText = document.createElement("label");
-    passwordText.innerText = "New password: ";
-    form.appendChild(passwordText);
-    const passwordContent = document.createElement("input");
-    passwordContent.type = "password";
-    form.appendChild(passwordContent);
-
-    form.appendChild(document.createElement("br"));
-    form.appendChild(document.createElement("br"));
-
-    const submit = document.createElement("input");
-    submit.type = "submit";
-    form.appendChild(submit);
-
-    submit.addEventListener("click", (e) => {
-        api.put("user", {
-            headers: {
-                Authorization: token,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: emailContent.value,
-                name: nameContent.value,
-                password: passwordContent.value,
-            }),
-        })
-            .then((data) => console.log(data))
-            .catch((err) => {
-                raiseError(err);
-            });
     });
 }
